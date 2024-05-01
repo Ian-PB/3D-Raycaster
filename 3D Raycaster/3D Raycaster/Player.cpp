@@ -49,8 +49,25 @@ void Player::rotateToMouse(sf::Vector2f t_mousePos)
 
 	line = t_mousePos - position;
 	angleR = std::atan2f(line.y, line.x); // Find the angle of the line in radians
+
+	// Code to move camera like a shooter sideways
+	/*if (line.x > previousXPos)
+	{
+		angleR += 0.1f;
+	}
+	else if(line.x < previousXPos)
+	{
+		angleR -= 0.1f;
+	}
+	if (angleR > 2 * PI)
+	{
+		angleR -= 2 * PI;
+	}*/
+
 	angleD = angleR * 180.0f / PI;     // Convert to degrees
 	body.setRotation(angleD + 90.0f);  // Rotate the body
+
+	previousXPos = line.x;
 }
 
 // Moves the player in the direction pressed

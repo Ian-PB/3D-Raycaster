@@ -40,9 +40,10 @@ private:
 	sf::RectangleShape body;
 	float size = 10.0f;
 	sf::Vector2f position;
+	float previousXPos = 0.0f;
 
 	// Movement Variables
 	float speed = 2.5f;
 	Direction direction;
-	float angleR; // Radians
+	float angleR = 0.0f; // Radians
 };
