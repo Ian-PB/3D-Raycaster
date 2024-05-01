@@ -334,7 +334,8 @@ void Game::drawRays3D()
 			}
 		}
 		
-		sf::Color wallColor;
+		sf::Color wallColorTop;
+		sf::Color wallColorBottom;
 		int rayN = r * 2;
 		// Find the ray with the lowest distance
 		if (distV < distH)
@@ -343,15 +344,16 @@ void Game::drawRays3D()
 			rayPos.y = vy;
 			finalDistance = distV;
 
-			wallColor = { 255, 0, 0, 255 };
+			wallColorTop = { 255, 0, 0, 255 };
+			wallColorBottom = { 105, 0, 0, 255 };
 
 			// Draw ray
 			ray.append(player.getPos());
 			ray.append(rayPos);
 			// Color
-			ray[rayN].color = wallColor;
+			ray[rayN].color = wallColorBottom;
 			rayN++;
-			ray[rayN].color = wallColor;
+			ray[rayN].color = wallColorTop;
 		}
 
 		if (distH < distV)
@@ -360,14 +362,15 @@ void Game::drawRays3D()
 			rayPos.y = hy;
 			finalDistance = distH;
 
-			wallColor = { 100, 0, 0, 255};
+			wallColorTop = { 100, 0, 0, 255};
+			wallColorBottom = { 50, 0, 0, 255};
 			// Draw ray
 			ray.append(player.getPos());
 			ray.append(rayPos);
 			// Color
-			ray[rayN].color = wallColor;
+			ray[rayN].color = wallColorBottom;
 			rayN++;
-			ray[rayN].color = wallColor;
+			ray[rayN].color = wallColorTop;
 		}
 
 
@@ -395,10 +398,11 @@ void Game::drawRays3D()
 		wallSegment.append(tempVector);
 
 		int wallN = r * 2;
+		
 		// Color
-		wallSegment[wallN].color = wallColor;
+		wallSegment[wallN].color = wallColorTop;
 		wallN++;
-		wallSegment[wallN].color = wallColor;
+		wallSegment[wallN].color = wallColorBottom;
 
 
 		rayAngle += DEGREE_R;
