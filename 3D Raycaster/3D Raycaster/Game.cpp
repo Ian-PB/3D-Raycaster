@@ -28,7 +28,7 @@ Game::Game() :
 
 	// Rays
 	ray.setPrimitiveType(sf::Lines);
-	wallSegment.setPrimitiveType(sf::Lines);
+	wallSegment.setPrimitiveType(sf::TrianglesStrip);
 }
 
 /// <summary>
