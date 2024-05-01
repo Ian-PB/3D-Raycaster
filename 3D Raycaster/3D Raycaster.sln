@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34728.123
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "3D Raycaster", "3D Raycaster\3D Raycaster.vcxproj", "{B21F473F-94D2-46BF-BC2D-B5713A5790C4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B21F473F-94D2-46BF-BC2D-B5713A5790C4}.Debug|x64.ActiveCfg = Debug|x64
+		{B21F473F-94D2-46BF-BC2D-B5713A5790C4}.Debug|x64.Build.0 = Debug|x64
+		{B21F473F-94D2-46BF-BC2D-B5713A5790C4}.Debug|x86.ActiveCfg = Debug|Win32
+		{B21F473F-94D2-46BF-BC2D-B5713A5790C4}.Debug|x86.Build.0 = Debug|Win32
+		{B21F473F-94D2-46BF-BC2D-B5713A5790C4}.Release|x64.ActiveCfg = Release|x64
+		{B21F473F-94D2-46BF-BC2D-B5713A5790C4}.Release|x64.Build.0 = Release|x64
+		{B21F473F-94D2-46BF-BC2D-B5713A5790C4}.Release|x86.ActiveCfg = Release|Win32
+		{B21F473F-94D2-46BF-BC2D-B5713A5790C4}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {ABB1BAE3-2E6B-45DC-8650-1D2C63005F77}
+	EndGlobalSection
+EndGlobal
