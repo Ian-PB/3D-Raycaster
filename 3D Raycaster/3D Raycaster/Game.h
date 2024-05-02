@@ -37,6 +37,7 @@ private:
 	void render();
 	
 	void setupFontAndText();
+	void setupSprites();
 	void setupObjects();
 
 	sf::RenderWindow m_window; // main SFML window
@@ -76,7 +77,7 @@ private:
 
 	sf::VertexArray wallSegment;
 
-
+	sf::RectangleShape floor;
 
 };
 

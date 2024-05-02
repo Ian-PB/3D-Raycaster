@@ -20,6 +20,7 @@ Game::Game() :
 	m_exitGame{false} //when true game will exit
 {
 	setupFontAndText(); // load font 
+	setupSprites();
 	setupObjects(); // load texture
 
 	// Map
@@ -174,6 +175,8 @@ void Game::render()
 		// Rays
 		m_window.draw(ray); // Used for DeBug
 
+		// Floor 3D
+		m_window.draw(floor);
 		// Walls 3D
 		m_window.draw(wallSegment);
 	}
@@ -187,6 +190,13 @@ void Game::render()
 void Game::setupFontAndText()
 {
 	
+}
+
+void Game::setupSprites()
+{
+	floor.setFillColor({ 200, 200, 200, 255 });
+	floor.setSize({ SCREEN_WIDTH / 2 - 18, 160 });
+	floor.setPosition(SCREEN_WIDTH / 2 + 18, 160);
 }
 
 /// <summary>
