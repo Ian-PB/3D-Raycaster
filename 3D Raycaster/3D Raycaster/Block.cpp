@@ -17,16 +17,3 @@ void Block::spawn(int t_size, sf::Vector2f t_pos)
 
 	active = true;
 }
-
-void Block::collisionDetection(Player& t_player)
-{
-
-	if (t_player.getBody().getGlobalBounds().intersects(body.getGlobalBounds()))
-	{
-		t_player.setPos(safePos);
-	}
-	else
-	{
-		safePos = t_player.getPos();
-	}
-}

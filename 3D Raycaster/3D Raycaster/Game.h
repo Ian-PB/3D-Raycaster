@@ -10,9 +10,11 @@
 /// Don't forget the endif at the bottom
 /// </summary>
 #include <SFML/Graphics.hpp>
+#include <iostream>
+
 #include "Globals.h"
 #include "Player.h"
-#include "Block.h"
+#include "Wall.h"
 
 class Game
 {
@@ -62,7 +64,7 @@ private:
 	};
 
 	// Blocks
-	Block blocks[64];
+	Wall walls[64];
 
 	// Rays
 	void drawRays3D();

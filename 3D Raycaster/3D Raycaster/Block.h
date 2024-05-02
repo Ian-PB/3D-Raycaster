@@ -13,18 +13,16 @@ public:
 	void spawn(int t_size, sf::Vector2f t_pos);
 	sf::RectangleShape getBody() { return body; }
 
-	void collisionDetection(Player& t_player);
-
 	bool active = false;
 
-private:
+protected: // Can be used in the inherited class
 
 	sf::RectangleShape body;
 	float size;
 
 	sf::Vector2f position;
 
-	sf::Vector2f safePos;
+private:
 
 };
 

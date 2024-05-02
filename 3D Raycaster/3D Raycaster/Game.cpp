@@ -6,7 +6,6 @@
 /// </summary>
 
 #include "Game.h"
-#include <iostream>
 
 
 
@@ -133,10 +132,10 @@ void Game::update(sf::Time t_deltaTime)
 
 	for (int i = 0; i < 64; i++)
 	{
-		if (blocks[i].active)
+		if (walls[i].active)
 		{
 			// Blocks collision
-			blocks[i].collisionDetection(player);
+			walls[i].collisionDetection(player);
 		}
 	}
 }
@@ -153,10 +152,10 @@ void Game::render()
 
 	for (int i = 0; i < 64; i++)
 	{
-		if (blocks[i].active)
+		if (walls[i].active)
 		{
 			// Blocks
-			m_window.draw(blocks[i].getBody());
+			m_window.draw(walls[i].getBody());
 		}
 
 		// Rays
@@ -199,7 +198,7 @@ void Game::drawMap()
 		// Check the grid slot
 		if (map[i] == 1)
 		{
-			blocks[i].spawn(blockSize, pos);
+			walls[i].spawn(blockSize, pos);
 		}
 
 		pos.x += blockSize;
@@ -220,6 +219,8 @@ void Game::drawRays3D()
 	float rayAngle = player.getAngle() - DEGREE_R * 32;
 
 	sf::Color wallColor;
+	sf::Color wallColorH;
+	sf::Color wallColorV;
 
 
 
@@ -274,7 +275,7 @@ void Game::drawRays3D()
 				distH = dist(player.getPos().x, player.getPos().y, hx, hy, rayAngle);
 
 				// Color
-				wallColor = WALL_COLOR;
+				wallColorH = WALL_COLOR;
 
 				dof = 8; // Hit a wall
 			}
@@ -285,7 +286,7 @@ void Game::drawRays3D()
 				distH = dist(player.getPos().x, player.getPos().y, hx, hy, rayAngle);
 
 				// Color
-				wallColor = INVIS_COLOR;
+				wallColorH = INVIS_COLOR;
 
 				dof = 8; // Hit a wall
 			}
@@ -350,7 +351,7 @@ void Game::drawRays3D()
 				distV = dist(player.getPos().x, player.getPos().y, vx, vy, rayAngle);
 
 				// Color
-				wallColor = WALL_COLOR;
+				wallColorV = WALL_COLOR;
 
 				dof = 8; // Hit a wall
 			}
@@ -361,7 +362,7 @@ void Game::drawRays3D()
 				distV = dist(player.getPos().x, player.getPos().y, vx, vy, rayAngle);
 
 				// Color
-				wallColor = INVIS_COLOR;
+				wallColorV = INVIS_COLOR;
 
 				dof = 8; // Hit a wall
 			}
@@ -384,6 +385,7 @@ void Game::drawRays3D()
 			rayPos.y = vy;
 			finalDistance = distV;
 
+			wallColor = wallColorV;
 			wallColor += SIDE_COLOR_CHANGE;
 		}
 		else if (distH < distV)
@@ -391,6 +393,8 @@ void Game::drawRays3D()
 			rayPos.x = hx;
 			rayPos.y = hy;
 			finalDistance = distH;
+
+			wallColor = wallColorH;
 		}
 
 		// Draw ray
