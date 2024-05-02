@@ -294,6 +294,9 @@ void Game::drawRays3D()
 
 		float nTan = -tan(rayAngle);
 
+		sf::Color wallColorTop;
+		sf::Color wallColorBottom;
+
 
 		if ((rayAngle >= P2 && rayAngle <= P3) || (rayAngle <= -P2 && rayAngle >= -P3)) // Looking left
 		{
@@ -342,8 +345,8 @@ void Game::drawRays3D()
 			}
 		}
 		
-		sf::Color wallColorTop;
-		sf::Color wallColorBottom;
+
+
 		int rayN = r * 2;
 		// Find the ray with the lowest distance
 		if (distV < distH)
@@ -352,8 +355,9 @@ void Game::drawRays3D()
 			rayPos.y = vy;
 			finalDistance = distV;
 
-			wallColorTop = { 0, 0, 0, 255 };
-			wallColorBottom = { 100, 100, 100, 255 };
+
+			wallColorTop = { 100, 100, 100, 255 };
+			wallColorBottom = { 0, 0, 0, 255 };
 		}
 		else if (distH < distV)
 		{
@@ -361,8 +365,8 @@ void Game::drawRays3D()
 			rayPos.y = hy;
 			finalDistance = distH;
 
-			wallColorTop = { 50, 50, 50, 255};
-			wallColorBottom = { 150, 150, 150, 255};
+			wallColorTop = { 150, 150, 150, 255};
+			wallColorBottom = { 50, 50, 50, 255};
 		}
 
 		// Draw ray
