@@ -24,6 +24,7 @@ public:
 	// "Get" functions
 	sf::RectangleShape getBody() { return body; }
 	sf::Vector2f getPos() { return position; }
+	void setPos(sf::Vector2f t_newPos) { position = t_newPos; }
 	float getAngle() { return angleR; }
 
 	// Movement

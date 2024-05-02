@@ -124,13 +124,21 @@ void Game::update(sf::Time t_deltaTime)
 	{
 		m_window.close();
 	}
+	// Rays & 3D
+	drawRays3D();
 
 	// Player
 	player.checkDirection();
 	player.rotateToMouse(mousePos);
 
-	// Rays
-	drawRays3D();
+	for (int i = 0; i < 64; i++)
+	{
+		if (blocks[i].active)
+		{
+			// Blocks collision
+			blocks[i].collisionDetection(player);
+		}
+	}
 }
 
 /// <summary>
@@ -344,35 +352,27 @@ void Game::drawRays3D()
 			rayPos.y = vy;
 			finalDistance = distV;
 
-			wallColorTop = { 255, 0, 0, 255 };
-			wallColorBottom = { 105, 0, 0, 255 };
-
-			// Draw ray
-			ray.append(player.getPos());
-			ray.append(rayPos);
-			// Color
-			ray[rayN].color = wallColorBottom;
-			rayN++;
-			ray[rayN].color = wallColorTop;
+			wallColorTop = { 0, 0, 0, 255 };
+			wallColorBottom = { 100, 100, 100, 255 };
 		}
-
-		if (distH < distV)
+		else if (distH < distV)
 		{
 			rayPos.x = hx;
 			rayPos.y = hy;
 			finalDistance = distH;
 
-			wallColorTop = { 100, 0, 0, 255};
-			wallColorBottom = { 50, 0, 0, 255};
-			// Draw ray
-			ray.append(player.getPos());
-			ray.append(rayPos);
-			// Color
-			ray[rayN].color = wallColorBottom;
-			rayN++;
-			ray[rayN].color = wallColorTop;
+			wallColorTop = { 50, 50, 50, 255};
+			wallColorBottom = { 150, 150, 150, 255};
 		}
 
+		// Draw ray
+		ray.append(player.getPos());
+		ray.append(rayPos);
+
+		// Set Color
+		ray[rayN].color = wallColorBottom;
+		rayN++;
+		ray[rayN].color = wallColorTop;
 
 
 		//----- Draw 3D Walls -----//

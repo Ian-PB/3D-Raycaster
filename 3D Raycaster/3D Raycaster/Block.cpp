@@ -2,7 +2,7 @@
 
 Block::Block()
 {
-	body.setFillColor(sf::Color::White);
+	body.setFillColor(sf::Color::Black);
 }
 
 void Block::spawn(int t_size, sf::Vector2f t_pos)
@@ -16,4 +16,17 @@ void Block::spawn(int t_size, sf::Vector2f t_pos)
 	body.setOrigin(size / 2, size / 2);
 
 	active = true;
+}
+
+void Block::collisionDetection(Player& t_player)
+{
+
+	if (t_player.getBody().getGlobalBounds().intersects(body.getGlobalBounds()))
+	{
+		t_player.setPos(safePos);
+	}
+	else
+	{
+		safePos = t_player.getPos();
+	}
 }
