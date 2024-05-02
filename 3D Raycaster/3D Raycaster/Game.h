@@ -14,7 +14,9 @@
 
 #include "Globals.h"
 #include "Player.h"
+// Blocks
 #include "Wall.h"
+#include "InvisTop.h"
 
 class Game
 {
@@ -65,6 +67,7 @@ private:
 
 	// Blocks
 	Wall walls[64];
+	InvisTop invisTops[64];
 
 	// Rays
 	void drawRays3D();

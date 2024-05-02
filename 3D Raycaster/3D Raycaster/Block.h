@@ -7,8 +7,6 @@
 class Block
 {
 public:
-	Block();
-
 
 	void spawn(int t_size, sf::Vector2f t_pos);
 	sf::RectangleShape getBody() { return body; }

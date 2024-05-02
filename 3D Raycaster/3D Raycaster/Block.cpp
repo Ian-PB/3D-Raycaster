@@ -1,9 +1,5 @@
 #include "Block.h"
 
-Block::Block()
-{
-	body.setFillColor(sf::Color::Black);
-}
 
 void Block::spawn(int t_size, sf::Vector2f t_pos)
 {

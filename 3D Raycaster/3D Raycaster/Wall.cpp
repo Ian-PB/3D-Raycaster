@@ -1,5 +1,10 @@
 #include "Wall.h"
 
+Wall::Wall()
+{
+	body.setFillColor(sf::Color::Black);
+}
+
 void Wall::collisionDetection(Player& t_player)
 {
 

@@ -7,6 +7,8 @@ class Wall : public Block
 {
 public:
 
+	Wall();
+
 	void collisionDetection(Player& t_player);
 
 private:
