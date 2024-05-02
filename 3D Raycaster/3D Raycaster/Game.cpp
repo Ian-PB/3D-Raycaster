@@ -219,6 +219,8 @@ void Game::drawRays3D()
 
 	float rayAngle = player.getAngle() - DEGREE_R * 32;
 
+	sf::Color wallColor;
+
 
 
 	// Draw ray
@@ -264,12 +266,26 @@ void Game::drawRays3D()
 			my = (int)(rayPos.y) >> 6;
 			mp = my * mapX + mx;
 
-
+			// Check what it hit
 			if (mp > 0 && mp < mapX * mapY && map[mp] == 1)
 			{
 				hx = rayPos.x;
 				hy = rayPos.y;
 				distH = dist(player.getPos().x, player.getPos().y, hx, hy, rayAngle);
+
+				// Color
+				wallColor = WALL_COLOR;
+
+				dof = 8; // Hit a wall
+			}
+			else if (mp > 0 && mp < mapX * mapY && map[mp] == 2)
+			{
+				hx = rayPos.x;
+				hy = rayPos.y;
+				distH = dist(player.getPos().x, player.getPos().y, hx, hy, rayAngle);
+
+				// Color
+				wallColor = INVIS_COLOR;
 
 				dof = 8; // Hit a wall
 			}
@@ -294,8 +310,7 @@ void Game::drawRays3D()
 
 		float nTan = -tan(rayAngle);
 
-		sf::Color wallColorTop;
-		sf::Color wallColorBottom;
+
 
 
 		if ((rayAngle >= P2 && rayAngle <= P3) || (rayAngle <= -P2 && rayAngle >= -P3)) // Looking left
@@ -334,6 +349,20 @@ void Game::drawRays3D()
 				vy = rayPos.y;
 				distV = dist(player.getPos().x, player.getPos().y, vx, vy, rayAngle);
 
+				// Color
+				wallColor = WALL_COLOR;
+
+				dof = 8; // Hit a wall
+			}
+			else if (mp > 0 && mp < mapX * mapY && map[mp] == 2)
+			{
+				vx = rayPos.x;
+				vy = rayPos.y;
+				distV = dist(player.getPos().x, player.getPos().y, vx, vy, rayAngle);
+
+				// Color
+				wallColor = INVIS_COLOR;
+
 				dof = 8; // Hit a wall
 			}
 			else
@@ -355,18 +384,13 @@ void Game::drawRays3D()
 			rayPos.y = vy;
 			finalDistance = distV;
 
-
-			wallColorTop = { 100, 100, 100, 255 };
-			wallColorBottom = { 0, 0, 0, 255 };
+			wallColor += SIDE_COLOR_CHANGE;
 		}
 		else if (distH < distV)
 		{
 			rayPos.x = hx;
 			rayPos.y = hy;
 			finalDistance = distH;
-
-			wallColorTop = { 150, 150, 150, 255};
-			wallColorBottom = { 50, 50, 50, 255};
 		}
 
 		// Draw ray
@@ -374,9 +398,9 @@ void Game::drawRays3D()
 		ray.append(rayPos);
 
 		// Set Color
-		ray[rayN].color = wallColorBottom;
+		ray[rayN].color = wallColor;
 		rayN++;
-		ray[rayN].color = wallColorTop;
+		ray[rayN].color = wallColor;
 
 
 		//----- Draw 3D Walls -----//
@@ -404,9 +428,9 @@ void Game::drawRays3D()
 		int wallN = r * 2;
 		
 		// Color
-		wallSegment[wallN].color = wallColorTop;
+		wallSegment[wallN].color = wallColor;
 		wallN++;
-		wallSegment[wallN].color = wallColorBottom;
+		wallSegment[wallN].color = wallColor;
 
 
 		rayAngle += DEGREE_R;
