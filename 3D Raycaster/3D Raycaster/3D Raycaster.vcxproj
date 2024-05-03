@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="Block.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Invis3D.cpp" />
     <ClCompile Include="InvisTop.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -30,6 +31,7 @@
     <ClInclude Include="Block.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Globals.h" />
+    <ClInclude Include="Invis3D.h" />
     <ClInclude Include="InvisTop.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Wall.h" />

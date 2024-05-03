@@ -146,6 +146,12 @@ void Game::update(sf::Time t_deltaTime)
 			// Blocks collision
 			invisTops[i].collisionDetection(player);
 		}
+		// Invis walls 3D collisions
+		if (invis3Ds[i].active)
+		{
+			// Blocks collision
+			invis3Ds[i].collisionDetection(player);
+		}
 	}
 }
 
@@ -167,10 +173,15 @@ void Game::render()
 			m_window.draw(walls[i].getBody());
 		}
 		//// Invis Tops
-		//if (invisTops[i].active)
+		//else if (invisTops[i].active)
 		//{
 		//	m_window.draw(invisTops[i].getBody());
 		//}
+		// Invis 3D
+		else if (invis3Ds[i].active)
+		{
+			m_window.draw(invis3Ds[i].getBody());
+		}
 
 		// Rays
 		m_window.draw(ray); // Used for DeBug
@@ -228,6 +239,10 @@ void Game::drawMap()
 		else if (map[i] == 2)
 		{
 			invisTops[i].spawn(blockSize, pos);
+		}
+		else if (map[i] == 3)
+		{
+			invis3Ds[i].spawn(blockSize, pos);
 		}
 
 		pos.x += blockSize;

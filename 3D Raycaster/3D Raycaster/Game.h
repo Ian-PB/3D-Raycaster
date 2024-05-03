@@ -17,6 +17,7 @@
 // Blocks
 #include "Wall.h"
 #include "InvisTop.h"
+#include "Invis3D.h"
 
 class Game
 {
@@ -54,21 +55,22 @@ private:
 	int mapY = 8;
 	int blockSize = 64;
 
-	int map[64] =
+	int map[64] = // 1 = wall, 2 = invis (2D), 3 = invis (3D),
 	{
 		1,1,1,1,1,1,1,1,
 		1,1,1,0,0,0,0,1,
-		1,1,2,0,0,0,0,1,
+		1,1,3,0,0,0,0,1,
 		1,0,0,0,0,1,0,1,
 		1,0,0,0,0,0,0,1,
-		1,0,2,0,0,0,0,1,
-		1,0,0,0,0,2,0,1,
+		1,0,3,2,0,0,0,1,
+		1,0,0,0,0,3,0,1,
 		1,1,1,1,1,1,1,1
 	};
 
 	// Blocks
 	Wall walls[64];
 	InvisTop invisTops[64];
+	Invis3D invis3Ds[64];
 
 	// Rays
 	void drawRays3D();
