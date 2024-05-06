@@ -21,10 +21,13 @@ Game::Game() :
 {
 	setupFontAndText(); // load font 
 	setupSprites();
-	setupObjects(); // load texture
 
 	// Map
 	drawMap();
+	player.setup(spawnPos);
+
+	setupObjects(); // load texture
+
 
 	// Rays
 	ray.setPrimitiveType(sf::Lines);
@@ -112,6 +115,12 @@ void Game::processKeys(sf::Event t_event)
 	{
 		m_exitGame = true;
 	}
+
+	if (sf::Keyboard::Q == t_event.key.code)
+	{
+		firstPersonMode = !firstPersonMode;
+	}
+	
 }
 
 /// <summary>
@@ -124,13 +133,18 @@ void Game::update(sf::Time t_deltaTime)
 	{
 		m_window.close();
 	}
+
 	// Rays & 3D
 	drawRays3D();
 
 	// Player
-	player.checkDirection();
-	player.rotateToMouse(mousePos);
+	if (player.alive)
+	{
+		player.checkDirection();
+		player.rotateToMouse(mousePos);
+	}
 
+	// Collisions
 	for (int i = 0; i < 64; i++)
 	{
 		// Walls collision
@@ -151,6 +165,12 @@ void Game::update(sf::Time t_deltaTime)
 		{
 			// Blocks collision
 			invis3Ds[i].collisionDetection(player);
+		}
+		// Traps
+		if (traps[i].active)
+		{
+			// Blocks collision
+			traps[i].collisionDetection(player, spawnPos);
 		}
 	}
 }
@@ -182,14 +202,22 @@ void Game::render()
 		{
 			m_window.draw(invis3Ds[i].getBody());
 		}
+		else if (traps[i].active)
+		{
+			m_window.draw(traps[i].getBody());
+		}
 
 		// Rays
 		m_window.draw(ray); // Used for DeBug
 
-		// Floor 3D
-		m_window.draw(floor);
-		// Walls 3D
-		m_window.draw(wallSegment);
+		if (firstPersonMode)
+		{
+			// Floor 3D
+			m_window.draw(floor);
+
+			// Walls 3D
+			m_window.draw(wallSegment);
+		}
 	}
 
 	m_window.display();
@@ -200,14 +228,13 @@ void Game::render()
 /// </summary>
 void Game::setupFontAndText()
 {
-	
 }
 
 void Game::setupSprites()
 {
 	floor.setFillColor({ 200, 200, 200, 255 });
-	floor.setSize({ SCREEN_WIDTH / 2 - 18, 160 });
-	floor.setPosition(SCREEN_WIDTH / 2 + 18, 160);
+	floor.setSize({ SCREEN_WIDTH / 2 + 10 - 18, 160 });
+	floor.setPosition(SCREEN_WIDTH / 2 + 3, 160);
 }
 
 /// <summary>
@@ -215,7 +242,7 @@ void Game::setupSprites()
 /// </summary>
 void Game::setupObjects()
 {
-	player.setup({ SCREEN_WIDTH / 4.0f, SCREEN_HEIGHT / 2.0f });
+
 }
 
 void Game::drawMap()
@@ -243,6 +270,14 @@ void Game::drawMap()
 		else if (map[i] == 3)
 		{
 			invis3Ds[i].spawn(blockSize, pos);
+		}
+		else if (map[i] == 4)
+		{
+			traps[i].spawn(blockSize, pos);
+		}
+		else if (map[i] == 9)
+		{
+			spawnPos = pos;
 		}
 
 		pos.x += blockSize;
@@ -452,33 +487,36 @@ void Game::drawRays3D()
 
 
 		//----- Draw 3D Walls -----//
-		
-		// Fix fish eye effect
-		float correctedAngle = player.getAngle() - rayAngle;
-
-		finalDistance = finalDistance * cos(correctedAngle);
-
-		float lineHeight = (blockSize * 320 / finalDistance);
-		if (lineHeight > 320) // Cap the line's height at 320
+		if (firstPersonMode)
 		{
-			lineHeight = 320;
+			// Fix fish eye effect
+			float correctedAngle = player.getAngle() - rayAngle;
+
+			finalDistance = finalDistance * cos(correctedAngle);
+
+			float lineHeight = (blockSize * 320 / finalDistance);
+			if (lineHeight > 320) // Cap the line's height at 320
+			{
+				lineHeight = 320;
+			}
+
+			float lineOffset = 160 - lineHeight / 2;
+
+
+			sf::Vector2f tempVector;
+			tempVector = { r * 8 + 515, lineOffset };
+			wallSegment.append(tempVector);
+			tempVector = { r * 8 + 515, lineHeight + lineOffset };
+			wallSegment.append(tempVector);
+
+			int wallN = r * 2;
+
+			// Color Walls
+			wallSegment[wallN].color = wallColor;
+			wallN++;
+			wallSegment[wallN].color = wallColor;
 		}
 
-		float lineOffset = 160 - lineHeight / 2;
-
-		// Draw wall
-		sf::Vector2f tempVector;
-		tempVector = { r * 8 + 530, lineOffset };
-		wallSegment.append(tempVector);
-		tempVector = { r * 8 + 530, lineHeight + lineOffset };
-		wallSegment.append(tempVector);
-
-		int wallN = r * 2;
-		
-		// Color
-		wallSegment[wallN].color = wallColor;
-		wallN++;
-		wallSegment[wallN].color = wallColor;
 
 
 		rayAngle += DEGREE_R;

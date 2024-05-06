@@ -31,6 +31,8 @@ public:
 	void checkDirection();
 	void rotateToMouse(sf::Vector2f t_mousePos);
 
+	bool alive = true;
+
 private:
 
 	// Functions
@@ -44,7 +46,7 @@ private:
 	float previousXPos = 0.0f;
 
 	// Movement Variables
-	float speed = 2.5f;
+	float speed = 1.0f;
 	Direction direction;
 	float angleR = 0.0f; // Radians
 };

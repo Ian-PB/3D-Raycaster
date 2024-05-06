@@ -2,5 +2,5 @@
 
 InvisTop::InvisTop()
 {
-	body.setFillColor(sf::Color::Blue);
+	body.setFillColor(sf::Color::Green);
 }

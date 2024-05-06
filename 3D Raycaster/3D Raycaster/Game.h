@@ -18,6 +18,7 @@
 #include "Wall.h"
 #include "InvisTop.h"
 #include "Invis3D.h"
+#include "Trap.h"
 
 class Game
 {
@@ -55,14 +56,14 @@ private:
 	int mapY = 8;
 	int blockSize = 64;
 
-	int map[64] = // 1 = wall, 2 = invis (2D), 3 = invis (3D),
+	int map[64] = // 1 = wall, 2 = invis (2D), 3 = invis (3D), 4 = trap, 9 = playerSpawn
 	{
 		1,1,1,1,1,1,1,1,
 		1,1,1,0,0,0,0,1,
 		1,1,3,0,0,0,0,1,
-		1,0,0,0,0,1,0,1,
+		1,0,0,4,0,1,0,1,
 		1,0,0,0,0,0,0,1,
-		1,0,3,2,0,0,0,1,
+		1,0,3,2,0,9,0,1,
 		1,0,0,0,0,3,0,1,
 		1,1,1,1,1,1,1,1
 	};
@@ -71,16 +72,20 @@ private:
 	Wall walls[64];
 	InvisTop invisTops[64];
 	Invis3D invis3Ds[64];
+	Trap traps[64];
 
 	// Rays
 	void drawRays3D();
 	float dist(float ax, float ay, float bx, float by, float t_angle) { return (sqrt((bx - ax) * (bx - ax) + (by - ay) * (by - ay))); }
 	sf::VertexArray ray;
 
-	sf::VertexArray wallSegment;
 
+	// 3D
+	bool firstPersonMode = true;
+	sf::VertexArray wallSegment;
 	sf::RectangleShape floor;
 
+	sf::Vector2f spawnPos;
 };
 
 #endif // !GAME_HPP
