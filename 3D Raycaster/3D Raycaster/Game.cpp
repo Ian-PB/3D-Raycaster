@@ -172,6 +172,12 @@ void Game::update(sf::Time t_deltaTime)
 			// Blocks collision
 			traps[i].collisionDetection(player, spawnPos);
 		}
+		// Traps 3D
+		if (traps3D[i].active)
+		{
+			// Blocks collision
+			traps3D[i].collisionDetection(player, spawnPos);
+		}
 	}
 }
 
@@ -274,6 +280,10 @@ void Game::drawMap()
 		else if (map[i] == 4)
 		{
 			traps[i].spawn(blockSize, pos);
+		}
+		else if (map[i] == 5)
+		{
+			traps3D[i].spawn(blockSize, pos);
 		}
 		else if (map[i] == 9)
 		{

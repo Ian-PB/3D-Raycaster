@@ -53,7 +53,6 @@ void Player::rotateToMouse(sf::Vector2f t_mousePos)
 
 	angleD = angleR * 180.0f / PI;     // Convert to degrees
 	body.setRotation(angleR + 90.0f);  // Rotate the body
-	std::cout << angleR << "\n";
 	previousXPos = line.x;
 }
 
