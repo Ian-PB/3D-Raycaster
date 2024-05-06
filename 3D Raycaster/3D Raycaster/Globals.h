@@ -11,5 +11,7 @@ const double DEGREE_R = 0.0174533;
 // Colors
 const sf::Color WALL_COLOR = { 0, 0, 0, 255 };
 const sf::Color INVIS_COLOR = { 0, 255, 0, 255 };
+const sf::Color TRAP_COLOR = { 255, 0, 0, 255 };
+
 
 const sf::Color SIDE_COLOR_CHANGE = { 75, 75, 75, 255};

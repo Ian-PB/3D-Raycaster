@@ -51,6 +51,9 @@
     <ClCompile Include="Trap.cpp">
       <Filter>Source Files\Blocks</Filter>
     </ClCompile>
+    <ClCompile Include="Trap3D.cpp">
+      <Filter>Source Files\Blocks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -75,6 +78,9 @@
       <Filter>Header Files\Blocks</Filter>
     </ClInclude>
     <ClInclude Include="Trap.h">
+      <Filter>Header Files\Blocks</Filter>
+    </ClInclude>
+    <ClInclude Include="Trap3D.h">
       <Filter>Header Files\Blocks</Filter>
     </ClInclude>
   </ItemGroup>

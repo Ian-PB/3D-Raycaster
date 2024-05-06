@@ -369,6 +369,17 @@ void Game::drawRays3D()
 
 				dof = 8; // Hit a wall
 			}
+			else if (mp > 0 && mp < mapX * mapY && map[mp] == 5)
+			{
+				hx = rayPos.x;
+				hy = rayPos.y;
+				distH = dist(player.getPos().x, player.getPos().y, hx, hy, rayAngle);
+
+				// Color
+				wallColorH = TRAP_COLOR;
+
+				dof = 8; // Hit a wall
+			}
 			else
 			{
 				rayPos.x += xOffset;
@@ -389,8 +400,6 @@ void Game::drawRays3D()
 		float vy = player.getPos().y;
 
 		float nTan = -tan(rayAngle);
-
-
 
 
 		if ((rayAngle >= P2 && rayAngle <= P3) || (rayAngle <= -P2 && rayAngle >= -P3)) // Looking left
@@ -442,6 +451,17 @@ void Game::drawRays3D()
 
 				// Color
 				wallColorV = INVIS_COLOR;
+
+				dof = 8; // Hit a wall
+			}
+			else if (mp > 0 && mp < mapX * mapY && map[mp] == 5)
+			{
+				vx = rayPos.x;
+				vy = rayPos.y;
+				distV = dist(player.getPos().x, player.getPos().y, vx, vy, rayAngle);
+
+				// Color
+				wallColorV = TRAP_COLOR;
 
 				dof = 8; // Hit a wall
 			}
@@ -516,6 +536,7 @@ void Game::drawRays3D()
 			wallN++;
 			wallSegment[wallN].color = wallColor;
 		}
+
 
 
 

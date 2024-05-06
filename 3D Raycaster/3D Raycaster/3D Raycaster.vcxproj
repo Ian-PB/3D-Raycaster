@@ -26,6 +26,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Trap.cpp" />
+    <ClCompile Include="Trap3D.cpp" />
     <ClCompile Include="Wall.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -36,6 +37,7 @@
     <ClInclude Include="InvisTop.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Trap.h" />
+    <ClInclude Include="Trap3D.h" />
     <ClInclude Include="Wall.h" />
   </ItemGroup>
   <ItemGroup>
