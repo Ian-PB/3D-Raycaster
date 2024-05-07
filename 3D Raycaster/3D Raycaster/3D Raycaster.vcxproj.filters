@@ -25,6 +25,12 @@
     <Filter Include="Source Files\Blocks">
       <UniqueIdentifier>{0426171c-c5c2-4900-805a-b3398d428737}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Scenes">
+      <UniqueIdentifier>{17a5f11f-7c81-49d3-97a8-a16f6cf962d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Scenes">
+      <UniqueIdentifier>{5d5f9ecf-9b6c-4ae2-89cf-5e1579a1d40e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -54,6 +60,9 @@
     <ClCompile Include="Trap3D.cpp">
       <Filter>Source Files\Blocks</Filter>
     </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>Source Files\Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -82,6 +91,9 @@
     </ClInclude>
     <ClInclude Include="Trap3D.h">
       <Filter>Header Files\Blocks</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>Header Files\Scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

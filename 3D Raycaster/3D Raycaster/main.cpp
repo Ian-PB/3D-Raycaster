@@ -20,7 +20,7 @@
 #endif 
 
 
-#include "Game.h"
+#include "SceneManager.h"
 
 /// <summary>
 /// main enrtry point
@@ -28,8 +28,8 @@
 /// <returns>success or failure</returns>
 int main()
 {
-	Game game;
-	game.run();
+	SceneManager sceneManager;
+	sceneManager.run();
 
 	return 1; // success
 }

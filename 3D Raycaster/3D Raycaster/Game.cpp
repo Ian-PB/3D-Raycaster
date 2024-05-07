@@ -15,9 +15,7 @@
 /// load and setup the text 
 /// load and setup thne image
 /// </summary>
-Game::Game() :
-	m_window{ sf::VideoMode{ SCREEN_WIDTH, SCREEN_HEIGHT, 32U }, "Top Down" },
-	m_exitGame{false} //when true game will exit
+Game::Game()
 {
 	setupFontAndText(); // load font 
 	setupSprites();
@@ -43,56 +41,23 @@ Game::~Game()
 }
 
 
-/// <summary>
-/// main game loop
-/// update 60 times per second,
-/// process update as often as possible and at least 60 times per second
-/// draw as often as possible but only updates are on time
-/// if updates run slow then don't render frames
-/// </summary>
-void Game::run()
-{	
-	sf::Clock clock;
-	sf::Time timeSinceLastUpdate = sf::Time::Zero;
-	const float fps{ 60.0f };
-	sf::Time timePerFrame = sf::seconds(1.0f / fps); // 60 fps
-	while (m_window.isOpen())
-	{
-		processEvents(); // as many as possible
-		timeSinceLastUpdate += clock.restart();
-		while (timeSinceLastUpdate > timePerFrame)
-		{
-			timeSinceLastUpdate -= timePerFrame;
-			processEvents(); // at least 60 fps
-			update(timePerFrame); //60 fps
-		}
-		render(); // as many as possible
-	}
-}
+
 /// <summary>
 /// handle user and system events/ input
 /// get key presses/ mouse moves etc. from OS
 /// and user :: Don't do game update here
 /// </summary>
-void Game::processEvents()
+void Game::processEvents(sf::Event t_event)
 {
-	sf::Event newEvent;
-	while (m_window.pollEvent(newEvent))
+	if (sf::Event::KeyPressed == t_event.type) //user pressed a key
 	{
-		if ( sf::Event::Closed == newEvent.type) // window message
-		{
-			m_exitGame = true;
-		}
-		if (sf::Event::KeyPressed == newEvent.type) //user pressed a key
-		{
-			processKeys(newEvent);
-		}
+		processKeys(t_event);
+	}
 
-		// Mouse
-		if (sf::Event::MouseMoved == newEvent.type)
-		{
-			processMouseMove(newEvent);
-		}
+	// Mouse
+	if (sf::Event::MouseMoved == t_event.type)
+	{
+		processMouseMove(t_event);
 	}
 }
 
@@ -111,10 +76,6 @@ void Game::processMouseMove(sf::Event t_event)
 /// <param name="t_event">key press event</param>
 void Game::processKeys(sf::Event t_event)
 {
-	if (sf::Keyboard::Escape == t_event.key.code)
-	{
-		m_exitGame = true;
-	}
 
 	if (sf::Keyboard::Q == t_event.key.code)
 	{
@@ -129,11 +90,6 @@ void Game::processKeys(sf::Event t_event)
 /// <param name="t_deltaTime">time interval per frame</param>
 void Game::update(sf::Time t_deltaTime)
 {
-	if (m_exitGame)
-	{
-		m_window.close();
-	}
-
 	// Rays & 3D
 	drawRays3D();
 
@@ -184,49 +140,49 @@ void Game::update(sf::Time t_deltaTime)
 /// <summary>
 /// draw the frame and then switch buffers
 /// </summary>
-void Game::render()
+void Game::render(sf::RenderWindow& t_window)
 {
-	m_window.clear({ 180, 180, 180, 255 });
+	t_window.clear({ 180, 180, 180, 255 });
 	
 	// Player
-	m_window.draw(player.getBody());
+	t_window.draw(player.getBody());
 
 	for (int i = 0; i < 64; i++)
 	{
 		// Walls
 		if (walls[i].active)
 		{
-			m_window.draw(walls[i].getBody());
+			t_window.draw(walls[i].getBody());
 		}
 		//// Invis Tops
 		//else if (invisTops[i].active)
 		//{
-		//	m_window.draw(invisTops[i].getBody());
+		//	t_window.draw(invisTops[i].getBody());
 		//}
 		// Invis 3D
 		else if (invis3Ds[i].active)
 		{
-			m_window.draw(invis3Ds[i].getBody());
+			t_window.draw(invis3Ds[i].getBody());
 		}
 		else if (traps[i].active)
 		{
-			m_window.draw(traps[i].getBody());
+			t_window.draw(traps[i].getBody());
 		}
 
 		// Rays
-		m_window.draw(ray); // Used for DeBug
+		t_window.draw(ray); // Used for DeBug
 
 		if (firstPersonMode)
 		{
 			// Floor 3D
-			m_window.draw(floor);
+			t_window.draw(floor);
 
 			// Walls 3D
-			m_window.draw(wallSegment);
+			t_window.draw(wallSegment);
 		}
 	}
 
-	m_window.display();
+	t_window.display();
 }
 
 /// <summary>

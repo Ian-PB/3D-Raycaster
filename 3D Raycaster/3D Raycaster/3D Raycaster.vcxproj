@@ -25,6 +25,7 @@
     <ClCompile Include="InvisTop.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Trap.cpp" />
     <ClCompile Include="Trap3D.cpp" />
     <ClCompile Include="Wall.cpp" />
@@ -36,6 +37,7 @@
     <ClInclude Include="Invis3D.h" />
     <ClInclude Include="InvisTop.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Trap.h" />
     <ClInclude Include="Trap3D.h" />
     <ClInclude Include="Wall.h" />
