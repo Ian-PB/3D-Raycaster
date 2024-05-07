@@ -1,6 +1,6 @@
 #include "SceneManager.h"
 
-Scene SceneManager::currentMode = Scene::Game;
+Scene Scenes::currentMode = Scene::MainMenu;
 
 SceneManager::SceneManager() :
 	m_window{ sf::VideoMode{ SCREEN_WIDTH, SCREEN_HEIGHT, 32U }, "Top Down" },
@@ -43,13 +43,13 @@ void SceneManager::processEvents()
 		}
 
 		// Check which scene you are in and do the processEvents() of that scene
-		switch (SceneManager::currentMode)
+		switch (Scenes::currentMode)
 		{
 		case Scene::None:
 			break;
 
 		case Scene::MainMenu:
-			//mainMenu.processEvents(newEvent);
+			menu.processEvents(newEvent);
 			break;
 
 		case Scene::Game:
@@ -67,13 +67,13 @@ void SceneManager::update(sf::Time t_deltaTime)
 	}
 
 	// Check which scene you are in and do the update() of that scene
-	switch (SceneManager::currentMode)
+	switch (Scenes::currentMode)
 	{
 	case Scene::None:
 		break;
 
 	case Scene::MainMenu:
-		//mainMenu.update(t_deltaTime);
+		menu.update(t_deltaTime);
 		break;
 
 	case Scene::Game:
@@ -85,13 +85,13 @@ void SceneManager::update(sf::Time t_deltaTime)
 void SceneManager::render()
 {
 	// Check which scene you are in and do the update() of that scene
-	switch (SceneManager::currentMode)
+	switch (Scenes::currentMode)
 	{
 	case Scene::None:
 		break;
 
 	case Scene::MainMenu:
-		//mainMenu.render(m_window);
+		menu.render(m_window);
 		break;
 
 	case Scene::Game:

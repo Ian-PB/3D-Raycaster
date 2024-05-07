@@ -32,13 +32,6 @@ Game::Game()
 	wallSegment.setPrimitiveType(sf::TrianglesStrip);
 }
 
-/// <summary>
-/// default destructor we didn't dynamically allocate anything
-/// so we don't need to free it, but mthod needs to be here
-/// </summary>
-Game::~Game()
-{
-}
 
 
 
@@ -76,12 +69,15 @@ void Game::processMouseMove(sf::Event t_event)
 /// <param name="t_event">key press event</param>
 void Game::processKeys(sf::Event t_event)
 {
+	if (sf::Keyboard::Escape == t_event.key.code)
+	{
+		Scenes::currentMode = Scene::MainMenu;
+	}
 
 	if (sf::Keyboard::Q == t_event.key.code)
 	{
 		firstPersonMode = !firstPersonMode;
 	}
-	
 }
 
 /// <summary>
@@ -214,7 +210,7 @@ void Game::drawMap()
 
 	for (int i = 0; i < 64; i++)
 	{
-		if (pos.x >= SCREEN_WIDTH / 2)
+		if (pos.x >= SCREEN_WIDTH / 2.0f)
 		{
 			pos.y += blockSize;
 			pos.x = blockSize / 2.0f;

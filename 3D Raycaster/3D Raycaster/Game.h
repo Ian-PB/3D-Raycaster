@@ -1,18 +1,10 @@
-/// <summary>
-/// author Pete Lowe May 2019
-/// you need to change the above line or lose marks
-/// </summary>
-#ifndef GAME_HPP
-#define GAME_HPP
-/// <summary>
-/// include guards used so we don't process this file twice
-/// same as #pragma once
-/// Don't forget the endif at the bottom
-/// </summary>
+#pragma once
+
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
 #include "Globals.h"
+#include "Scenes.h"
 #include "Player.h"
 // Blocks
 #include "Wall.h"
@@ -25,7 +17,6 @@ class Game
 {
 public:
 	Game();
-	~Game();
 
 	void processEvents(sf::Event t_event);
 	void update(sf::Time t_deltaTime);
@@ -84,5 +75,4 @@ private:
 	sf::Vector2f spawnPos;
 };
 
-#endif // !GAME_HPP
 
