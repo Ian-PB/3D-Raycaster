@@ -68,9 +68,12 @@ private:
 
 
 	// 3D
-	bool firstPersonMode = true;
+	bool topDown = true;
+
 	sf::VertexArray wallSegment;
 	sf::RectangleShape floor;
+	sf::Texture gadgetTexture;
+	sf::Sprite gadgetSprite;
 
 	sf::Vector2f spawnPos;
 };

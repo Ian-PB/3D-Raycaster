@@ -76,7 +76,7 @@ void Game::processKeys(sf::Event t_event)
 
 	if (sf::Keyboard::Q == t_event.key.code)
 	{
-		firstPersonMode = !firstPersonMode;
+		topDown = !topDown;
 	}
 }
 
@@ -140,43 +140,49 @@ void Game::render(sf::RenderWindow& t_window)
 {
 	t_window.clear({ 180, 180, 180, 255 });
 	
-	// Player
-	t_window.draw(player.getBody());
 
-	for (int i = 0; i < 64; i++)
+	// Check which mode
+	if (topDown)
 	{
-		// Walls
-		if (walls[i].active)
-		{
-			t_window.draw(walls[i].getBody());
-		}
-		//// Invis Tops
-		//else if (invisTops[i].active)
-		//{
-		//	t_window.draw(invisTops[i].getBody());
-		//}
-		// Invis 3D
-		else if (invis3Ds[i].active)
-		{
-			t_window.draw(invis3Ds[i].getBody());
-		}
-		else if (traps[i].active)
-		{
-			t_window.draw(traps[i].getBody());
-		}
+		// Player
+		t_window.draw(player.getBody());
 
-		// Rays
-		t_window.draw(ray); // Used for DeBug
-
-		if (firstPersonMode)
+		// Top down Walls / Objects
+		for (int i = 0; i < 64; i++)
 		{
-			// Floor 3D
-			t_window.draw(floor);
+			// Walls
+			if (walls[i].active)
+			{
+				t_window.draw(walls[i].getBody());
+			}
+			// Invis 3D
+			else if (invis3Ds[i].active)
+			{
+				t_window.draw(invis3Ds[i].getBody());
+			}
+			else if (traps[i].active)
+			{
+				t_window.draw(traps[i].getBody());
+			}
 
-			// Walls 3D
-			t_window.draw(wallSegment);
+			// Rays
+			t_window.draw(ray); // Used for DeBug
 		}
 	}
+
+	else
+	{
+
+		// Floor 3D
+		t_window.draw(floor);
+
+		// Walls 3D
+		t_window.draw(wallSegment);
+
+		// Gadget that sorrounds 3D screen
+		t_window.draw(gadgetSprite);
+	}
+
 
 	t_window.display();
 }
@@ -190,9 +196,19 @@ void Game::setupFontAndText()
 
 void Game::setupSprites()
 {
+	// Floor
 	floor.setFillColor({ 200, 200, 200, 255 });
-	floor.setSize({ SCREEN_WIDTH / 2 + 10 - 18, 160 });
-	floor.setPosition(SCREEN_WIDTH / 2 + 3, 160);
+	floor.setSize({ SCREEN_WIDTH / 2 - 8, 160 });
+	floor.setPosition(5, 160);
+
+	// Gadget Sprite
+	if (!gadgetTexture.loadFromFile("ASSETS\\IMAGES\\Gadget.png"))
+	{
+		std::cout << "problem loading Gadget" << std::endl;
+	}
+
+	gadgetSprite.setTexture(gadgetTexture);
+	gadgetSprite.setScale(0.93, 1);
 }
 
 /// <summary>
@@ -469,35 +485,33 @@ void Game::drawRays3D()
 
 
 		//----- Draw 3D Walls -----//
-		if (firstPersonMode)
+		// 
+		// Fix fish eye effect
+		float correctedAngle = player.getAngle() - rayAngle;
+
+		finalDistance = finalDistance * cos(correctedAngle);
+
+		float lineHeight = (blockSize * 320 / finalDistance);
+		if (lineHeight > 320) // Cap the line's height at 320
 		{
-			// Fix fish eye effect
-			float correctedAngle = player.getAngle() - rayAngle;
-
-			finalDistance = finalDistance * cos(correctedAngle);
-
-			float lineHeight = (blockSize * 320 / finalDistance);
-			if (lineHeight > 320) // Cap the line's height at 320
-			{
-				lineHeight = 320;
-			}
-
-			float lineOffset = 160 - lineHeight / 2;
-
-
-			sf::Vector2f tempVector;
-			tempVector = { r * 8 + 515, lineOffset };
-			wallSegment.append(tempVector);
-			tempVector = { r * 8 + 515, lineHeight + lineOffset };
-			wallSegment.append(tempVector);
-
-			int wallN = r * 2;
-
-			// Color Walls
-			wallSegment[wallN].color = wallColor;
-			wallN++;
-			wallSegment[wallN].color = wallColor;
+			lineHeight = 320;
 		}
+
+		float lineOffset = 160 - lineHeight / 2;
+
+
+		sf::Vector2f tempVector;
+		tempVector = { r * 8 + 5, lineOffset };
+		wallSegment.append(tempVector);
+		tempVector = { r * 8 + 5, lineHeight + lineOffset };
+		wallSegment.append(tempVector);
+
+		int wallN = r * 2;
+
+		// Color Walls
+		wallSegment[wallN].color = wallColor;
+		wallN++;
+		wallSegment[wallN].color = wallColor;
 
 
 

@@ -28,7 +28,7 @@ void MainMenu::update(sf::Time t_deltaTime)
 {
 	for (int i = 0; i < 3; i++)
 	{
-		buttons[i].checkForMouse(mousePos);
+		colliding[i] = buttons[i].checkForMouse(mousePos);
 	}
 }
 
@@ -55,23 +55,25 @@ void MainMenu::processMouseDown(sf::Event t_event)
 {
 	for (int i = 0; i < 3; i++)
 	{
-		switch (i)
+		if (colliding[i])
 		{
+			switch (i)
+			{
+				// Start button
+			case 0:
+				Scenes::currentMode = Scene::Game;
+				break;
 
-		// Start button
-		case 0:
-			Scenes::currentMode = Scene::Game;
-			break;
+				// Help
+			case 1:
+				std::cout << "Help";
+				break;
 
-		// Help
-		case 1:
-			std::cout << "Help";
-			break;
-
-		// Exit
-		case 2:
-			std::cout << "Close";
-			break;
+				// Exit
+			case 2:
+				std::cout << "Close";
+				break;
+			}
 		}
 	}
 }
