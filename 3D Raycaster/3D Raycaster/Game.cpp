@@ -87,6 +87,14 @@ void Game::processKeys(sf::Event t_event)
 			if (doors[i].active)
 			{
 				doors[i].open();
+				map[i] = 0;
+				drawMap();
+			}
+			else if (doors3D[i].active)
+			{
+				doors3D[i].open();
+				map[i] = 0;
+				drawMap();
 			}
 		}
 	}
@@ -143,12 +151,19 @@ void Game::update(sf::Time t_deltaTime)
 			// Blocks collision
 			traps3D[i].collisionDetection(player, spawnPos);
 		}
-		// Door 2D
+		// Doors 2D
 		if (doors[i].active)
 		{
 			// Blocks collision
 			doors[i].collisionDetection(player);
 			doors[i].interactCheck(player.getBody());
+		}
+		// Doors 3D
+		if (doors3D[i].active)
+		{
+			// Blocks collision
+			doors3D[i].collisionDetection(player);
+			doors3D[i].interactCheck(player.getBody());
 		}
 	}
 }
@@ -183,11 +198,6 @@ void Game::render(sf::RenderWindow& t_window)
 			}
 			else if (doors[i].active)
 			{
-				for (int d = 0; d < 4; d++)
-				{
-					t_window.draw(doors[i].interactAreas[d]);
-				}
-
 				t_window.draw(doors[i].getBody());
 			}
 
@@ -287,6 +297,11 @@ void Game::drawMap()
 		{
 			doors[i].spawn(blockSize, pos);
 			doors[i].setup();
+		}
+		else if (map[i] == 7)
+		{
+			doors3D[i].spawn(blockSize, pos);
+			doors3D[i].setup();
 		}
 		else if (map[i] == 9)
 		{
@@ -402,6 +417,17 @@ void Game::drawRays3D()
 
 				dof = 8; // Hit a wall
 			}
+			else if (mp > 0 && mp < mapX * mapY && map[mp] == 7)
+			{
+				hx = rayPos.x;
+				hy = rayPos.y;
+				distH = dist(player.getPos().x, player.getPos().y, hx, hy, rayAngle);
+
+				// Color
+				wallColorH = DOOR_COLOR;
+
+				dof = 8; // Hit a wall
+			}
 			else
 			{
 				rayPos.x += xOffset;
@@ -484,6 +510,17 @@ void Game::drawRays3D()
 
 				// Color
 				wallColorV = TRAP_COLOR;
+
+				dof = 8; // Hit a wall
+			}
+			else if (mp > 0 && mp < mapX * mapY && map[mp] == 7)
+			{
+				vx = rayPos.x;
+				vy = rayPos.y;
+				distV = dist(player.getPos().x, player.getPos().y, vx, vy, rayAngle);
+
+				// Color
+				wallColorV = DOOR_COLOR;
 
 				dof = 8; // Hit a wall
 			}
@@ -653,6 +690,15 @@ void Game::makeLight()
 
 				dof = 8; // Hit a wall
 			}
+			else if (mp > 0 && mp < mapX * mapY && map[mp] == 6)
+			{
+				hx = lightEnd.x;
+				hy = lightEnd.y;
+				distH = dist(player.getPos().x, player.getPos().y, hx, hy, lightAngle);
+
+
+				dof = 8; // Hit a wall
+			}
 			else
 			{
 				lightEnd.x += xOffset;
@@ -724,6 +770,15 @@ void Game::makeLight()
 				dof = 8; // Hit a wall
 			}
 			else if (mp > 0 && mp < mapX * mapY && map[mp] == 4)
+			{
+				vx = lightEnd.x;
+				vy = lightEnd.y;
+				distV = dist(player.getPos().x, player.getPos().y, vx, vy, lightAngle);
+
+
+				dof = 8; // Hit a wall
+			}
+			else if (mp > 0 && mp < mapX * mapY && map[mp] == 6)
 			{
 				vx = lightEnd.x;
 				vy = lightEnd.y;

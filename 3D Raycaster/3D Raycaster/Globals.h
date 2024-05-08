@@ -15,6 +15,8 @@ const int LIGHT_REACH = 100;
 const sf::Color WALL_COLOR = { 0, 0, 0, 255 };
 const sf::Color INVIS_COLOR = { 0, 255, 0, 255 };
 const sf::Color TRAP_COLOR = { 255, 0, 0, 255 };
+const sf::Color DOOR_COLOR = { 0, 0, 255, 255 };
+
 const sf::Color SIDE_COLOR_CHANGE = { 75, 75, 75, 255};
 
 // Light

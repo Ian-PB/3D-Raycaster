@@ -43,7 +43,7 @@ private:
 	int mapY = 8;
 	int blockSize = 64;
 
-	int map[64] = // 1 = wall, 2 = invis (2D), 3 = invis (3D), 4 = trap (2D), 5 = trap (3D), 6 = door (2D), 9 = playerSpawn
+	int map[64] = // 9 = playerSpawn
 	{
 		1,1,1,1,1,1,1,1,
 		1,0,0,0,0,0,0,1,
@@ -56,12 +56,13 @@ private:
 	};
 
 	// Blocks
-	Wall walls[64];
-	InvisTop invisTops[64];
-	Invis3D invis3Ds[64];
-	Trap traps[64];
-	Trap3D traps3D[64];
-	Door doors[64];
+	Wall walls[64];         // 1
+	InvisTop invisTops[64]; // 2
+	Invis3D invis3Ds[64];   // 3
+	Trap traps[64];         // 4
+	Trap3D traps3D[64];     // 5
+	Door doors[64];         // 6
+	Door doors3D[64];       // 7
 
 	// Rays
 	void drawRays3D();
