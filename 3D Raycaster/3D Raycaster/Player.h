@@ -28,8 +28,8 @@ public:
 	float getAngle() { return angleR; }
 
 	// Movement
-	void checkDirection();
-	void rotateToMouse(sf::Vector2f t_mousePos);
+	void checkDirection(bool t_2D);
+	void rotateToMouse(sf::Vector2f t_mousePos, bool t_2D);
 
 	bool alive = true;
 
@@ -37,16 +37,16 @@ private:
 
 	// Functions
 	void checkBoundries();
-	void move();
+	void move(bool t_2D);
 
 	// Variables
 	sf::RectangleShape body;
 	float size = 10.0f;
 	sf::Vector2f position;
-	float previousXPos = 0.0f;
 
 	// Movement Variables
 	float speed = 1.0f;
 	Direction direction;
 	float angleR = 0.0f; // Radians
+	
 };

@@ -11,37 +11,37 @@ Player::Player()
 }
 
 // Check the direction you pressed in
-void Player::checkDirection()
+void Player::checkDirection(bool t_2D)
 {
 	direction = Direction::None;
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 	{
 		direction = Direction::Up;
-		move();
+		move(t_2D);
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 	{
 		direction = Direction::Down;
-		move();
+		move(t_2D);
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 	{
 		direction = Direction::Left;
-		move();
+		move(t_2D);
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
 		direction = Direction::Right;
-		move();
+		move(t_2D);
 	}
 }
 
 // Checks the mouse position and rotates the player to face that position
-void Player::rotateToMouse(sf::Vector2f t_mousePos)
+void Player::rotateToMouse(sf::Vector2f t_mousePos, bool t_2D)
 {
 	// Rotates the player to the mouse
 	float angleD; // Degrees
@@ -50,38 +50,75 @@ void Player::rotateToMouse(sf::Vector2f t_mousePos)
 	line = t_mousePos - position;
 	angleR = std::atan2f(line.y, line.x); // Find the angle of the line in radians
 
+	if (!t_2D) // In 3D mode move camera when moving mouse side to side
+	{
+		
+	}
 
+
+	// Set the rotations
 	angleD = angleR * 180.0f / PI;     // Convert to degrees
 	body.setRotation(angleR + 90.0f);  // Rotate the body
-	previousXPos = line.x;
 }
 
 // Moves the player in the direction pressed
-void Player::move()
+void Player::move(bool t_2D)
 {
 	sf::Vector2f movement = { 0.0f, 0.0f };
 
-	switch (direction)
+	if (t_2D)
 	{
-	case Direction::None:
-		break;
+		switch (direction)
+		{
+		case Direction::None:
+			break;
 
-	case Direction::Up:
-		movement.y = -speed;
-		break;
+		case Direction::Up:
+			movement.y = -speed;
+			break;
 
-	case Direction::Down:
-		movement.y = speed;
-		break;
+		case Direction::Down:
+			movement.y = speed;
+			break;
 
-	case Direction::Left:
-		movement.x = -speed;
-		break;
+		case Direction::Left:
+			movement.x = -speed;
+			break;
 
-	case Direction::Right:
-		movement.x = speed;
-		break;
+		case Direction::Right:
+			movement.x = speed;
+			break;
+		}
 	}
+	else // Move depending on the direction you're facing
+	{
+		switch (direction)
+		{
+		case Direction::None:
+			break;
+
+		case Direction::Up:
+			movement.x = cos(angleR) * speed;
+			movement.y = sin(angleR) * speed;
+			break;
+
+		case Direction::Down:
+			movement.x = cos(angleR) * -speed;
+			movement.y = sin(angleR) * -speed;
+			break;
+
+		case Direction::Left:
+			movement.x = sin(angleR) * speed;
+			movement.y = cos(angleR) * speed;
+			break;
+
+		case Direction::Right:
+			movement.x = sin(angleR) * -speed;
+			movement.y = cos(angleR) * -speed;
+			break;
+		}
+	}
+
 	position += movement;
 	body.setPosition(position); // Change hitbox position
 

@@ -46,21 +46,21 @@ private:
 		1,1,1,1,1,1,1,1,
 		1,0,0,0,0,0,0,1,
 		1,0,0,0,0,0,0,1,
-		1,1,1,1,6,1,1,1,
-		1,0,0,2,0,3,0,1,
-		1,0,0,0,0,9,0,1,
-		1,0,0,0,0,0,0,1,
+		1,1,1,7,6,1,1,1,
+		1,0,2,0,0,4,0,1,
+		1,3,0,0,0,0,5,1,
+		1,0,0,0,9,0,0,1,
 		1,1,1,1,1,1,1,1
 	};
 
 	// Blocks
-	Wall walls[64];				  // 1
-	InvisableWall invisTops[64];  // 2
-	InvisableWall invis3Ds[64];   // 3
-	Trap traps[64];				  // 4
-	Trap traps3D[64];			  // 5
-	Door doors[64];				  // 6
-	Door doors3D[64];			  // 7
+	Wall walls[64];					 // 1
+	InvisableWall invisWalls[64];    // 2
+	InvisableWall invisWalls3D[64];  // 3
+	Trap traps[64];					 // 4
+	Trap traps3D[64];				 // 5
+	Door doors[64];					 // 6
+	Door doors3D[64];				 // 7
 
 	// Rays
 	void drawRays3D();

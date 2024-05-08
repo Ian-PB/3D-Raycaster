@@ -84,17 +84,23 @@ void Game::processKeys(sf::Event t_event)
 	{
 		for (int i = 0; i < 64; i++)
 		{
-			if (doors[i].active)
+			if (topDown)
 			{
-				doors[i].open();
-				map[i] = 0;
-				drawMap();
+				if (doors[i].active)
+				{
+					doors[i].open();
+					map[i] = 0;
+					drawMap();
+				}
 			}
-			else if (doors3D[i].active)
+			else
 			{
-				doors3D[i].open();
-				map[i] = 0;
-				drawMap();
+				if (doors3D[i].active)
+				{
+					doors3D[i].open();
+					map[i] = 0;
+					drawMap();
+				}
 			}
 		}
 	}
@@ -113,8 +119,8 @@ void Game::update(sf::Time t_deltaTime)
 	// Player
 	if (player.alive)
 	{
-		player.checkDirection();
-		player.rotateToMouse(mousePos);
+		player.checkDirection(topDown);
+		player.rotateToMouse(mousePos, topDown);
 	}
 
 	// Collisions
@@ -128,16 +134,16 @@ void Game::update(sf::Time t_deltaTime)
 		}
 
 		// Invis walls collisions
-		if (invisTops[i].active)
+		if (invisWalls3D[i].active)
 		{
 			// Blocks collision
-			invisTops[i].collisionDetection(player);
+			invisWalls3D[i].collisionDetection(player);
 		}
 		// Invis walls 3D collisions
-		if (invis3Ds[i].active)
+		if (invisWalls[i].active)
 		{
 			// Blocks collision
-			invis3Ds[i].collisionDetection(player);
+			invisWalls[i].collisionDetection(player);
 		}
 		// Traps
 		if (traps[i].active)
@@ -188,9 +194,9 @@ void Game::render(sf::RenderWindow& t_window)
 				t_window.draw(walls[i].getBody());
 			}
 			// Invis 3D
-			else if (invis3Ds[i].active)
+			else if (invisWalls[i].active)
 			{
-				t_window.draw(invis3Ds[i].getBody());
+				t_window.draw(invisWalls[i].getBody());
 			}
 			else if (traps[i].active)
 			{
@@ -279,11 +285,11 @@ void Game::drawMap()
 		}
 		else if (map[i] == 2)
 		{
-			invisTops[i].spawn(blockSize, pos);
+			invisWalls[i].spawn(blockSize, pos);
 		}
 		else if (map[i] == 3)
 		{
-			invis3Ds[i].spawn(blockSize, pos);
+			invisWalls3D[i].spawn(blockSize, pos);
 		}
 		else if (map[i] == 4)
 		{
@@ -311,8 +317,8 @@ void Game::drawMap()
 		{
 			// Empty
 			walls[i].active = false;
-			invisTops[i].active = false;
-			invis3Ds[i].active = false;
+			invisWalls3D[i].active = false;
+			invisWalls[i].active = false;
 			traps[i].active = false;
 			traps3D[i].active = false;
 		}
@@ -395,7 +401,7 @@ void Game::drawRays3D()
 
 				dof = 8; // Hit a wall
 			}
-			else if (mp > 0 && mp < mapX * mapY && map[mp] == 2)
+			else if (mp > 0 && mp < mapX * mapY && map[mp] == 3)
 			{
 				hx = rayPos.x;
 				hy = rayPos.y;
@@ -491,7 +497,7 @@ void Game::drawRays3D()
 
 				dof = 8; // Hit a wall
 			}
-			else if (mp > 0 && mp < mapX * mapY && map[mp] == 2)
+			else if (mp > 0 && mp < mapX * mapY && map[mp] == 3)
 			{
 				vx = rayPos.x;
 				vy = rayPos.y;
@@ -672,7 +678,7 @@ void Game::makeLight()
 
 				dof = 8; // Hit a wall
 			}
-			else if (mp > 0 && mp < mapX * mapY && map[mp] == 3)
+			else if (mp > 0 && mp < mapX * mapY && map[mp] == 2)
 			{
 				hx = lightEnd.x;
 				hy = lightEnd.y;
@@ -760,7 +766,7 @@ void Game::makeLight()
 
 				dof = 8; // Hit a wall
 			}
-			else if (mp > 0 && mp < mapX * mapY && map[mp] == 3)
+			else if (mp > 0 && mp < mapX * mapY && map[mp] == 2)
 			{
 				vx = lightEnd.x;
 				vy = lightEnd.y;
