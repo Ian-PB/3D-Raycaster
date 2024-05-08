@@ -23,14 +23,12 @@
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Door.cpp" />
     <ClCompile Include="Game.cpp" />
-    <ClCompile Include="Invis3D.cpp" />
-    <ClCompile Include="InvisTop.cpp" />
+    <ClCompile Include="InvisableWall.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Trap.cpp" />
-    <ClCompile Include="Trap3D.cpp" />
     <ClCompile Include="Wall.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -39,14 +37,12 @@
     <ClInclude Include="Door.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Globals.h" />
-    <ClInclude Include="Invis3D.h" />
-    <ClInclude Include="InvisTop.h" />
+    <ClInclude Include="InvisableWall.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Scenes.h" />
     <ClInclude Include="Trap.h" />
-    <ClInclude Include="Trap3D.h" />
     <ClInclude Include="Wall.h" />
   </ItemGroup>
   <ItemGroup>

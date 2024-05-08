@@ -8,10 +8,8 @@
 #include "Player.h"
 // Blocks
 #include "Wall.h"
-#include "InvisTop.h"
-#include "Invis3D.h"
+#include "InvisableWall.h"
 #include "Trap.h"
-#include "Trap3D.h"
 #include "Door.h"
 
 class Game
@@ -49,20 +47,20 @@ private:
 		1,0,0,0,0,0,0,1,
 		1,0,0,0,0,0,0,1,
 		1,1,1,1,6,1,1,1,
-		1,0,0,0,0,0,0,1,
+		1,0,0,2,0,3,0,1,
 		1,0,0,0,0,9,0,1,
 		1,0,0,0,0,0,0,1,
 		1,1,1,1,1,1,1,1
 	};
 
 	// Blocks
-	Wall walls[64];         // 1
-	InvisTop invisTops[64]; // 2
-	Invis3D invis3Ds[64];   // 3
-	Trap traps[64];         // 4
-	Trap3D traps3D[64];     // 5
-	Door doors[64];         // 6
-	Door doors3D[64];       // 7
+	Wall walls[64];				  // 1
+	InvisableWall invisTops[64];  // 2
+	InvisableWall invis3Ds[64];   // 3
+	Trap traps[64];				  // 4
+	Trap traps3D[64];			  // 5
+	Door doors[64];				  // 6
+	Door doors3D[64];			  // 7
 
 	// Rays
 	void drawRays3D();

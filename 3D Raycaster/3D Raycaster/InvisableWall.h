@@ -3,14 +3,12 @@
 #include <SFML/Graphics.hpp>
 #include "Wall.h"
 
-class Invis3D : public Wall
+class InvisableWall : public Wall
 {
 public:
-
-	Invis3D();
+	InvisableWall();
 
 private:
-
 
 };
 
