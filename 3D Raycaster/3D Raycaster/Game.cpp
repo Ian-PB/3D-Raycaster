@@ -29,6 +29,7 @@ Game::Game()
 
 	// Rays
 	ray.setPrimitiveType(sf::Lines);
+	light.setPrimitiveType(sf::TrianglesStrip);
 	wallSegment.setPrimitiveType(sf::TrianglesStrip);
 }
 
@@ -78,6 +79,17 @@ void Game::processKeys(sf::Event t_event)
 	{
 		topDown = !topDown;
 	}
+
+	if (sf::Keyboard::E == t_event.key.code)
+	{
+		for (int i = 0; i < 64; i++)
+		{
+			if (doors[i].active)
+			{
+				doors[i].open();
+			}
+		}
+	}
 }
 
 /// <summary>
@@ -88,6 +100,7 @@ void Game::update(sf::Time t_deltaTime)
 {
 	// Rays & 3D
 	drawRays3D();
+	makeLight();
 
 	// Player
 	if (player.alive)
@@ -130,6 +143,13 @@ void Game::update(sf::Time t_deltaTime)
 			// Blocks collision
 			traps3D[i].collisionDetection(player, spawnPos);
 		}
+		// Door 2D
+		if (doors[i].active)
+		{
+			// Blocks collision
+			doors[i].collisionDetection(player);
+			doors[i].interactCheck(player.getBody());
+		}
 	}
 }
 
@@ -144,9 +164,6 @@ void Game::render(sf::RenderWindow& t_window)
 	// Check which mode
 	if (topDown)
 	{
-		// Player
-		t_window.draw(player.getBody());
-
 		// Top down Walls / Objects
 		for (int i = 0; i < 64; i++)
 		{
@@ -164,10 +181,23 @@ void Game::render(sf::RenderWindow& t_window)
 			{
 				t_window.draw(traps[i].getBody());
 			}
+			else if (doors[i].active)
+			{
+				for (int d = 0; d < 4; d++)
+				{
+					t_window.draw(doors[i].interactAreas[d]);
+				}
+
+				t_window.draw(doors[i].getBody());
+			}
 
 			// Rays
-			t_window.draw(ray); // Used for DeBug
+			//t_window.draw(ray); // Used for DeBug
+			t_window.draw(light);
 		}
+
+		// Player
+		t_window.draw(player.getBody());
 	}
 
 	else
@@ -253,9 +283,23 @@ void Game::drawMap()
 		{
 			traps3D[i].spawn(blockSize, pos);
 		}
+		else if (map[i] == 6)
+		{
+			doors[i].spawn(blockSize, pos);
+			doors[i].setup();
+		}
 		else if (map[i] == 9)
 		{
 			spawnPos = pos;
+		}
+		else // = 0
+		{
+			// Empty
+			walls[i].active = false;
+			invisTops[i].active = false;
+			invis3Ds[i].active = false;
+			traps[i].active = false;
+			traps3D[i].active = false;
 		}
 
 		pos.x += blockSize;
@@ -474,9 +518,13 @@ void Game::drawRays3D()
 			wallColor = wallColorH;
 		}
 
+
+
 		// Draw ray
 		ray.append(player.getPos());
 		ray.append(rayPos);
+
+
 
 		// Set Color
 		ray[rayN].color = wallColor;
@@ -518,4 +566,238 @@ void Game::drawRays3D()
 
 		rayAngle += DEGREE_R;
 	}
+}
+
+void Game::makeLight()
+{
+	int mx, my, mp, dof;
+	float r;
+	float finalDistance = 0.0f;
+	float xOffset = 0.0f, yOffset = 0.0f;
+	float lightAngle = player.getAngle() - DEGREE_R * 32;
+	sf::Vector2f lightEnd;
+
+	light.clear();
+
+
+
+
+	// Draw ray
+	for (r = 0; r < 64; r++)
+	{
+		//----- Horizontal Line Check -----//
+		dof = 0;
+
+		float distH = 1000000;
+		float hx = player.getPos().x;
+		float hy = player.getPos().y;
+
+		float aTan = -1 / tan(lightAngle);
+
+
+		if (lightAngle < 0) // Looking up
+		{
+			lightEnd.y = (((int)player.getPos().y >> 6) << 6) - 0.0001f;
+			lightEnd.x = (player.getPos().y - lightEnd.y) * aTan + player.getPos().x;
+			yOffset = -64;
+			xOffset = -yOffset * aTan;
+		}
+
+		if (lightAngle > 0) // Looking down
+		{
+			lightEnd.y = (((int)player.getPos().y >> 6) << 6) + 64;
+			lightEnd.x = (player.getPos().y - lightEnd.y) * aTan + player.getPos().x;
+			yOffset = 64;
+			xOffset = -yOffset * aTan;
+		}
+
+		if (lightAngle == 0 || lightAngle == PI) // Looking straight left or right
+		{
+			lightEnd.x = player.getPos().x;
+			lightEnd.y = player.getPos().y;
+
+			dof = 8;
+		}
+
+		while (dof < 8)
+		{
+			mx = (int)(lightEnd.x) >> 6;
+			my = (int)(lightEnd.y) >> 6;
+			mp = my * mapX + mx;
+
+			// Check what it hit
+			if (mp > 0 && mp < mapX * mapY && map[mp] == 1)
+			{
+				hx = lightEnd.x;
+				hy = lightEnd.y;
+				distH = dist(player.getPos().x, player.getPos().y, hx, hy, lightAngle);
+
+
+				dof = 8; // Hit a wall
+			}
+			else if (mp > 0 && mp < mapX * mapY && map[mp] == 3)
+			{
+				hx = lightEnd.x;
+				hy = lightEnd.y;
+				distH = dist(player.getPos().x, player.getPos().y, hx, hy, lightAngle);
+
+
+				dof = 8; // Hit a wall
+			}
+			else if (mp > 0 && mp < mapX * mapY && map[mp] == 4)
+			{
+				hx = lightEnd.x;
+				hy = lightEnd.y;
+				distH = dist(player.getPos().x, player.getPos().y, hx, hy, lightAngle);
+
+
+				dof = 8; // Hit a wall
+			}
+			else
+			{
+				lightEnd.x += xOffset;
+				lightEnd.y += yOffset;
+
+				dof += 1;
+			}
+		}
+
+
+
+
+		//----- Vertical Line Check -----//
+		dof = 0;
+
+		float distV = 1000000;
+		float vx = player.getPos().x;
+		float vy = player.getPos().y;
+
+		float nTan = -tan(lightAngle);
+
+
+		if ((lightAngle >= P2 && lightAngle <= P3) || (lightAngle <= -P2 && lightAngle >= -P3)) // Looking left
+		{
+			lightEnd.x = (((int)player.getPos().x >> 6) << 6) - 0.0001f;
+			lightEnd.y = (player.getPos().x - lightEnd.x) * nTan + player.getPos().y;
+			xOffset = -64;
+			yOffset = -xOffset * nTan;
+		}
+
+		if ((lightAngle <= P2 && lightAngle >= -P2) || (lightAngle >= P3 && lightAngle <= P3)) // Looking right
+		{
+			lightEnd.x = (((int)player.getPos().x >> 6) << 6) + 64;
+			lightEnd.y = (player.getPos().x - lightEnd.x) * nTan + player.getPos().y;
+			xOffset = 64;
+			yOffset = -xOffset * nTan;
+		}
+
+		if (lightAngle == 0 || lightAngle == PI) // Looking straight up or down
+		{
+			lightEnd.x = player.getPos().x;
+			lightEnd.y = player.getPos().y;
+
+			dof = 8;
+		}
+
+		while (dof < 8)
+		{
+			mx = (int)(lightEnd.x) >> 6;
+			my = (int)(lightEnd.y) >> 6;
+			mp = my * mapX + mx;
+
+			if (mp > 0 && mp < mapX * mapY && map[mp] == 1)
+			{
+				vx = lightEnd.x;
+				vy = lightEnd.y;
+				distV = dist(player.getPos().x, player.getPos().y, vx, vy, lightAngle);
+
+
+				dof = 8; // Hit a wall
+			}
+			else if (mp > 0 && mp < mapX * mapY && map[mp] == 3)
+			{
+				vx = lightEnd.x;
+				vy = lightEnd.y;
+				distV = dist(player.getPos().x, player.getPos().y, vx, vy, lightAngle);
+
+
+				dof = 8; // Hit a wall
+			}
+			else if (mp > 0 && mp < mapX * mapY && map[mp] == 4)
+			{
+				vx = lightEnd.x;
+				vy = lightEnd.y;
+				distV = dist(player.getPos().x, player.getPos().y, vx, vy, lightAngle);
+
+
+				dof = 8; // Hit a wall
+			}
+			else
+			{
+				lightEnd.x += xOffset;
+				lightEnd.y += yOffset;
+
+				dof += 1;
+			}
+		}
+
+
+
+		int lightN = r * 2;
+		// Find the ray with the lowest distance
+		if (distV < distH)
+		{
+			lightEnd.x = vx;
+			lightEnd.y = vy;
+			finalDistance = distV;
+		}
+		else if (distH < distV)
+		{
+			lightEnd.x = hx;
+			lightEnd.y = hy;
+			finalDistance = distH;
+		}
+
+
+
+		// Draw Light
+
+		light.append(player.getPos());
+
+		// Check if the current lenght is less than the light's lenght
+		if (finalDistance < LIGHT_REACH)
+		{
+			light.append(lightEnd);
+		}
+		else
+		{
+			// Get light lenght
+			lightEnd = pointOnALine(player.getPos(), lightEnd, lightAngle, LIGHT_REACH);
+			light.append(lightEnd);
+		}
+
+		// Set Color
+		light[lightN].color = LIGHT_COLOR;
+		lightN++;
+		light[lightN].color = LIGHT_COLOR;
+
+
+		lightAngle += DEGREE_R;
+	}
+}
+
+
+sf::Vector2f Game::pointOnALine(sf::Vector2f t_startPoint, sf::Vector2f t_endPoint, float t_angle, int t_distance)
+{
+	// Calculate the total length of the line
+	float totalLength = dist(t_startPoint.x, t_startPoint.y, t_endPoint.x, t_endPoint.y, t_angle);
+
+	// Calculate the ratio of the desired length to the total length of the line
+	float ratio = t_distance / totalLength;
+
+	// Calculate the coordinates of the point at the desired length along the line
+	float newX = t_startPoint.x + ratio * (t_endPoint.x - t_startPoint.x);
+	float newY = t_startPoint.y + ratio * (t_endPoint.y - t_startPoint.y);
+
+	return { newX, newY };
 }

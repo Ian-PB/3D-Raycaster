@@ -12,6 +12,7 @@
 #include "Invis3D.h"
 #include "Trap.h"
 #include "Trap3D.h"
+#include "Door.h"
 
 class Game
 {
@@ -42,15 +43,15 @@ private:
 	int mapY = 8;
 	int blockSize = 64;
 
-	int map[64] = // 1 = wall, 2 = invis (2D), 3 = invis (3D), 4 = trap (2D), 5 = trap (3D), 9 = playerSpawn
+	int map[64] = // 1 = wall, 2 = invis (2D), 3 = invis (3D), 4 = trap (2D), 5 = trap (3D), 6 = door (2D), 9 = playerSpawn
 	{
 		1,1,1,1,1,1,1,1,
-		1,1,1,0,0,0,0,1,
-		1,1,3,0,0,0,0,1,
-		1,0,5,4,0,1,0,1,
 		1,0,0,0,0,0,0,1,
-		1,0,3,2,0,9,0,1,
-		1,0,0,0,0,3,0,1,
+		1,0,0,0,0,0,0,1,
+		1,1,1,1,6,1,1,1,
+		1,0,0,0,0,0,0,1,
+		1,0,0,0,0,9,0,1,
+		1,0,0,0,0,0,0,1,
 		1,1,1,1,1,1,1,1
 	};
 
@@ -60,11 +61,15 @@ private:
 	Invis3D invis3Ds[64];
 	Trap traps[64];
 	Trap3D traps3D[64];
+	Door doors[64];
 
 	// Rays
 	void drawRays3D();
+	void makeLight();
 	float dist(float ax, float ay, float bx, float by, float t_angle) { return (sqrt((bx - ax) * (bx - ax) + (by - ay) * (by - ay))); }
+	sf::Vector2f pointOnALine(sf::Vector2f t_startPoint, sf::Vector2f t_endPoint, float t_angle, int t_distance);
 	sf::VertexArray ray;
+	sf::VertexArray light; // Visable
 
 
 	// 3D
