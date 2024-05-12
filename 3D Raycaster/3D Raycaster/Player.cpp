@@ -45,20 +45,50 @@ void Player::rotateToMouse(sf::Vector2f t_mousePos, bool t_2D)
 {
 	// Rotates the player to the mouse
 	float angleD; // Degrees
-	sf::Vector2f line;
 
-	line = t_mousePos - position;
-	angleR = std::atan2f(line.y, line.x); // Find the angle of the line in radians
 
-	if (!t_2D) // In 3D mode move camera when moving mouse side to side
+	if (t_2D) // In 3D mode move camera when moving mouse side to side
 	{
-		
+		sf::Vector2f line;
+
+		line = t_mousePos - position;
+		angleR = std::atan2f(line.y, line.x); // Find the angle of the line in radians
 	}
+	else
+	{
+		// Calculate the change in mouse position since the last frame
+		sf::Vector2f deltaMousePos = t_mousePos - prevMousePos;
+		prevMousePos = t_mousePos;
+
+
+		// Check if the mouse is moving to the left or right
+		if (deltaMousePos.x > 0)
+		{
+			angleR += 0.05f * (deltaMousePos.x / 10.0f);
+
+			// Correct angle
+			if (angleR > PI)
+			{
+				angleR = -PI;
+			}
+		}
+		else if (deltaMousePos.x < 0)
+		{
+			angleR -= 0.05f * -(deltaMousePos.x / 10.0f);
+
+			// Correct angle
+			if (angleR < -PI)
+			{
+				angleR = PI;
+			}
+		}
+	}
+
 
 
 	// Set the rotations
 	angleD = angleR * 180.0f / PI;     // Convert to degrees
-	body.setRotation(angleR + 90.0f);  // Rotate the body
+	body.setRotation(angleD + 90.0f);  // Rotate the body
 }
 
 // Moves the player in the direction pressed

@@ -61,11 +61,6 @@ void SceneManager::processEvents()
 
 void SceneManager::update(sf::Time t_deltaTime)
 {
-	if (m_exitGame)
-	{
-		m_window.close();
-	}
-
 	// Check which scene you are in and do the update() of that scene
 	switch (Scenes::currentMode)
 	{

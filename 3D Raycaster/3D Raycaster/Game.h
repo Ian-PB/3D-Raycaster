@@ -11,6 +11,7 @@
 #include "InvisableWall.h"
 #include "Trap.h"
 #include "Door.h"
+#include "MovingTrap.h"
 
 class Game
 {
@@ -41,17 +42,19 @@ private:
 	int mapY = 8;
 	int blockSize = 64;
 
-	int map[64] = // 9 = playerSpawn
+	int map[64] = // -1 = playerSpawn
 	{
 		1,1,1,1,1,1,1,1,
 		1,0,0,0,0,0,0,1,
 		1,0,0,0,0,0,0,1,
-		1,1,1,7,6,1,1,1,
-		1,0,2,0,0,4,0,1,
-		1,3,0,0,0,0,5,1,
-		1,0,0,0,9,0,0,1,
+		1,0,0,-1,0,0,0,1,
+		1,0,0,0,0,0,0,1,
+		1,0,11,0,0,0,0,1,
+		1,0,0,0,0,0,0,1,
 		1,1,1,1,1,1,1,1
 	};
+
+
 
 	// Blocks
 	Wall walls[64];					 // 1
@@ -61,6 +64,10 @@ private:
 	Trap traps3D[64];				 // 5
 	Door doors[64];					 // 6
 	Door doors3D[64];				 // 7
+	MovingTrap trapSide[64];         // 8
+	MovingTrap trapUpDown[64];       // 9
+	MovingTrap trapSide3D[64];       // 10
+	MovingTrap trapUpDown3D[64];     // 11
 
 	// Rays
 	void drawRays3D();

@@ -24,7 +24,7 @@ public:
 	// "Get" functions
 	sf::RectangleShape getBody() { return body; }
 	sf::Vector2f getPos() { return position; }
-	void setPos(sf::Vector2f t_newPos) { position = t_newPos; }
+	void setPos(sf::Vector2f t_newPos) { position = t_newPos; body.setPosition(position); }
 	float getAngle() { return angleR; }
 
 	// Movement
@@ -48,5 +48,9 @@ private:
 	float speed = 1.0f;
 	Direction direction;
 	float angleR = 0.0f; // Radians
+
 	
+	// 3D mouse movement
+	sf::Vector2f prevMousePos;
+	float prevAngleR = 0.0f;
 };

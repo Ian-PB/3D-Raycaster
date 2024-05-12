@@ -11,7 +11,7 @@ public:
 	void setup();
 
 	void interactCheck(sf::RectangleShape t_player);
-	void open();
+	bool open();
 
 	sf::RectangleShape interactAreas[4];
 

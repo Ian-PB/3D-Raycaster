@@ -82,24 +82,39 @@ void Game::processKeys(sf::Event t_event)
 
 	if (sf::Keyboard::E == t_event.key.code)
 	{
+		// DEBUGGING
+		for (int m = 0; m < 64; m++)
+		{
+			if (m % 8 == 0)
+			{
+				std::cout << "\n";
+			}
+			std::cout << map[m] << ", ";
+		}
+		std::cout << "\n";
+
 		for (int i = 0; i < 64; i++)
 		{
 			if (topDown)
 			{
 				if (doors[i].active)
 				{
-					doors[i].open();
-					map[i] = 0;
-					drawMap();
+					if (doors[i].open())
+					{
+						map[i] = 0;
+						drawMap();
+					}
 				}
 			}
 			else
 			{
 				if (doors3D[i].active)
 				{
-					doors3D[i].open();
-					map[i] = 0;
-					drawMap();
+					if (doors3D[i].open())
+					{
+						map[i] = 0;
+						drawMap();
+					}
 				}
 			}
 		}
@@ -171,7 +186,46 @@ void Game::update(sf::Time t_deltaTime)
 			doors3D[i].collisionDetection(player);
 			doors3D[i].interactCheck(player.getBody());
 		}
+
+		// Traps Side to Side 2D
+		if (trapSide[i].active)
+		{
+			// Blocks collision
+			trapSide[i].collisionDetection(player, spawnPos);
+
+			// Check collisions with all other objects in 2D space
+			trapSide[i].move(map, i, 8);
+		}
+		// Traps Up and Down 2D
+		if (trapUpDown[i].active)
+		{
+			// Blocks collision
+			trapUpDown[i].collisionDetection(player, spawnPos);
+
+			// Check collisions with all other objects in 2D space
+			trapUpDown[i].move(map, i, 9);
+		}
+
+		// Traps Side to Side 3D
+		if (trapSide3D[i].active)
+		{
+			// Blocks collision
+			trapSide3D[i].collisionDetection(player, spawnPos);
+
+			// Check collisions with all other objects in 2D space
+			trapSide3D[i].move(map, i, 10);
+		}
+		// Traps Up and Down 3D
+		if (trapUpDown3D[i].active)
+		{
+			// Blocks collision
+			trapUpDown3D[i].collisionDetection(player, spawnPos);
+
+			// Check collisions with all other objects in 2D space
+			trapUpDown3D[i].move(map, i, 11);
+		}
 	}
+	drawMap();
 }
 
 /// <summary>
@@ -205,6 +259,14 @@ void Game::render(sf::RenderWindow& t_window)
 			else if (doors[i].active)
 			{
 				t_window.draw(doors[i].getBody());
+			}
+			else if (trapSide[i].active)
+			{
+				t_window.draw(trapSide[i].getBody());
+			}
+			else if (trapUpDown[i].active)
+			{
+				t_window.draw(trapUpDown[i].getBody());
 			}
 
 			// Rays
@@ -262,11 +324,30 @@ void Game::setupSprites()
 /// </summary>
 void Game::setupObjects()
 {
+	for (int i = 0; i < 64; i++)
+	{
+		trapSide[i].setup(0);
+		trapUpDown[i].setup(1);
 
+		trapSide3D[i].setup(0);
+		trapUpDown3D[i].setup(1);
+	}
 }
 
 void Game::drawMap()
 {
+	// De-activate all changable blocks
+	for (int i = 0; i < 64; i++)
+	{
+		// Traps
+		trapSide[i].active = false;
+		trapSide3D[i].active = false;
+		trapUpDown[i].active = false;
+		trapUpDown3D[i].active = false;
+		// Doors
+		doors[i].active = false;
+		doors3D[i].active = false;
+	}
 
 	sf::Vector2f pos = { blockSize / 2.0f, blockSize / 2.0f };
 
@@ -309,7 +390,23 @@ void Game::drawMap()
 			doors3D[i].spawn(blockSize, pos);
 			doors3D[i].setup();
 		}
+		else if (map[i] == 8)
+		{
+			trapSide[i].spawn(blockSize, pos);
+		}
 		else if (map[i] == 9)
+		{
+			trapUpDown[i].spawn(blockSize, pos);
+		}
+		else if (map[i] == 10)
+		{
+			trapSide3D[i].spawn(blockSize, pos);
+		}
+		else if (map[i] == 11)
+		{
+			trapUpDown3D[i].spawn(blockSize, pos);
+		}
+		else if (map[i] == -1)
 		{
 			spawnPos = pos;
 		}
@@ -326,6 +423,7 @@ void Game::drawMap()
 		pos.x += blockSize;
 	}
 }
+
 
 void Game::drawRays3D()
 {
@@ -434,6 +532,28 @@ void Game::drawRays3D()
 
 				dof = 8; // Hit a wall
 			}
+			else if (mp > 0 && mp < mapX * mapY && map[mp] == 10)
+			{
+				hx = rayPos.x;
+				hy = rayPos.y;
+				distH = dist(player.getPos().x, player.getPos().y, hx, hy, rayAngle);
+
+				// Color
+				wallColorH = TRAP_COLOR;
+
+				dof = 8; // Hit a wall
+			}
+			else if (mp > 0 && mp < mapX * mapY && map[mp] == 11)
+			{
+				hx = rayPos.x;
+				hy = rayPos.y;
+				distH = dist(player.getPos().x, player.getPos().y, hx, hy, rayAngle);
+
+				// Color
+				wallColorH = TRAP_COLOR;
+
+				dof = 8; // Hit a wall
+			}
 			else
 			{
 				rayPos.x += xOffset;
@@ -527,6 +647,28 @@ void Game::drawRays3D()
 
 				// Color
 				wallColorV = DOOR_COLOR;
+
+				dof = 8; // Hit a wall
+			}
+			else if (mp > 0 && mp < mapX * mapY && map[mp] == 10)
+			{
+				vx = rayPos.x;
+				vy = rayPos.y;
+				distV = dist(player.getPos().x, player.getPos().y, vx, vy, rayAngle);
+
+				// Color
+				wallColorV = TRAP_COLOR;
+
+				dof = 8; // Hit a wall
+			}
+			else if (mp > 0 && mp < mapX * mapY && map[mp] == 11)
+			{
+				vx = rayPos.x;
+				vy = rayPos.y;
+				distV = dist(player.getPos().x, player.getPos().y, vx, vy, rayAngle);
+
+				// Color
+				wallColorV = TRAP_COLOR;
 
 				dof = 8; // Hit a wall
 			}
@@ -705,6 +847,24 @@ void Game::makeLight()
 
 				dof = 8; // Hit a wall
 			}
+			else if (mp > 0 && mp < mapX * mapY && map[mp] == 8)
+			{
+				hx = lightEnd.x;
+				hy = lightEnd.y;
+				distH = dist(player.getPos().x, player.getPos().y, hx, hy, lightAngle);
+
+
+				dof = 8; // Hit a wall
+			}
+			else if (mp > 0 && mp < mapX * mapY && map[mp] == 9)
+			{
+				hx = lightEnd.x;
+				hy = lightEnd.y;
+				distH = dist(player.getPos().x, player.getPos().y, hx, hy, lightAngle);
+
+
+				dof = 8; // Hit a wall
+			}
 			else
 			{
 				lightEnd.x += xOffset;
@@ -785,6 +945,24 @@ void Game::makeLight()
 				dof = 8; // Hit a wall
 			}
 			else if (mp > 0 && mp < mapX * mapY && map[mp] == 6)
+			{
+				vx = lightEnd.x;
+				vy = lightEnd.y;
+				distV = dist(player.getPos().x, player.getPos().y, vx, vy, lightAngle);
+
+
+				dof = 8; // Hit a wall
+			}
+			else if (mp > 0 && mp < mapX * mapY && map[mp] == 8)
+			{
+				vx = lightEnd.x;
+				vy = lightEnd.y;
+				distV = dist(player.getPos().x, player.getPos().y, vx, vy, lightAngle);
+
+
+				dof = 8; // Hit a wall
+			}
+			else if (mp > 0 && mp < mapX * mapY && map[mp] == 9)
 			{
 				vx = lightEnd.x;
 				vy = lightEnd.y;

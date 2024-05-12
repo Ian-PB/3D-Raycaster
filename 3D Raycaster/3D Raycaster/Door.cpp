@@ -51,10 +51,13 @@ void Door::interactCheck(sf::RectangleShape t_player)
 	}
 }
 
-void Door::open()
+bool Door::open()
 {
 	if (canInteract)
 	{
 		active = false;
+		return true; // if opened
 	}
+
+	return false; // if not opened
 }
