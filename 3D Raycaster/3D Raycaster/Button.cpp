@@ -84,4 +84,7 @@ bool Button::checkForMouse(sf::Vector2f t_mousePos)
 void Button::changeColor(sf::Color t_color)
 {
 	body.setFillColor(t_color);
+
+	sf::Color change = { 50, 0, 50, 0 };
+	sprite.setColor(t_color - change);
 }
