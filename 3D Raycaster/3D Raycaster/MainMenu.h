@@ -12,7 +12,7 @@ class MainMenu
 public:
 	MainMenu();
 
-	void processEvents(sf::Event t_event);
+	void processEvents(sf::Event t_event, sf::RenderWindow& t_window);
 	void update(sf::Time t_deltaTime);
 	void render(sf::RenderWindow& t_window);
 
@@ -20,7 +20,6 @@ private:
 
 	void processMouseMove(sf::Event t_event);
 	void processMouseDown(sf::Event t_event);
-	void processKeys(sf::Event t_event);
 
 	void setupFontAndText();
 	void setupSprites();

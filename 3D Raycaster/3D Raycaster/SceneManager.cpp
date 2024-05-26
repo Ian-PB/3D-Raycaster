@@ -51,7 +51,7 @@ void SceneManager::processEvents()
 			break;
 
 		case Scene::MainMenu:
-			menu.processEvents(newEvent);
+			menu.processEvents(newEvent, m_window);
 			break;
 
 		case Scene::Game:

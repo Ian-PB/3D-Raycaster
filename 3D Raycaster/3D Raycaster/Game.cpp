@@ -72,11 +72,6 @@ void Game::processMouseMove(sf::Event t_event)
 /// <param name="t_event">key press event</param>
 void Game::processKeys(sf::Event t_event)
 {
-	if (sf::Keyboard::Escape == t_event.key.code)
-	{
-		exitGame = true;
-	}
-
 	if (sf::Keyboard::Q == t_event.key.code)
 	{
 		topDown = !topDown;

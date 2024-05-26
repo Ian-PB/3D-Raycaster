@@ -65,14 +65,14 @@ MainMenu::MainMenu()
 	instructions.setFont(font);
 	instructions.setCharacterSize(15);
 	instructions.setPosition(15, 15);
-	instructions.setString("Use W or Up-Arrow to move forwards. \nUse S or Down-Arrow to move backwards. \nD or Right-Arrow to rotate clockwise. \nA or Left-Arrow to rotate counter-clockwise. \nUse E to open doors(blue) \nUse Q to swap between 3D and 2D.");
+	instructions.setString("(Currently there is no sound, missing sprites and no death screen) \nUse W or Up-Arrow to move forwards. \nUse S or Down-Arrow to move backwards. \nD or Right-Arrow to rotate clockwise. \nA or Left-Arrow to rotate counter-clockwise. \nUse E to open doors(blue) \nUse Q to swap between 3D and 2D.");
 }
 
-void MainMenu::processEvents(sf::Event t_event)
+void MainMenu::processEvents(sf::Event t_event, sf::RenderWindow& t_window)
 {
-	if (sf::Event::KeyPressed == t_event.type) //user pressed a key
+	if (sf::Keyboard::Escape == t_event.key.code)
 	{
-		processKeys(t_event);
+		t_window.close();
 	}
 
 	// Mouse
@@ -191,11 +191,6 @@ void MainMenu::processMouseDown(sf::Event t_event)
 			}
 		}
 	}
-}
-
-void MainMenu::processKeys(sf::Event t_event)
-{
-	
 }
 
 void MainMenu::setupFontAndText()
