@@ -14,5 +14,7 @@ public:
 private:
 
 	sf::Vector2f safePos;
+
+	sf::Texture texture;
 };
 

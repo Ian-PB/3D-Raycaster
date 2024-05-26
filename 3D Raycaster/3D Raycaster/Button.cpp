@@ -4,6 +4,14 @@
 
 Button::Button()
 {
+	// Button Sprite
+	if (!texture.loadFromFile("ASSETS\\IMAGES\\Button.png"))
+	{
+		std::cout << "problem loading Button" << std::endl;
+	}
+
+	texture.setSmooth(true);
+	sprite.setTexture(texture);
 }
 
 void Button::setup(sf::Vector2f t_pos, float t_width, float t_height,  sf::Color t_color)
@@ -17,9 +25,11 @@ void Button::setup(sf::Vector2f t_pos, float t_width, float t_height,  sf::Color
 	body.setFillColor(t_color);
 
 	body.setOrigin({ width / 2, height / 2 });
+	sprite.setOrigin({ width / 2, height / 2 });
 
 	position = t_pos;
 	body.setPosition(position);
+	sprite.setPosition(position);
 }
 
 bool Button::checkForMouse(sf::Vector2f t_mousePos)
@@ -33,7 +43,35 @@ bool Button::checkForMouse(sf::Vector2f t_mousePos)
 			// if colliding
 			colliding = true;
 
+			// Increase size
+			if (body.getScale().x < 1.4f)
+			{
+				scale += 0.1f;
+				body.setScale(scale, scale);
+				sprite.setScale(scale, scale);
+			}
+
 			return colliding;
+		}
+		else
+		{
+			// Decrease size
+			if (body.getScale().x > 1.0f)
+			{
+				scale -= 0.1f;
+				body.setScale(scale, scale);
+				sprite.setScale(scale, scale);
+			}
+		}
+	}
+	else
+	{
+		// Decrease size
+		if (body.getScale().x > 1.0f)
+		{
+			scale -= 0.1f;
+			body.setScale(scale, scale);
+			sprite.setScale(scale, scale);
 		}
 	}
 

@@ -81,6 +81,9 @@ private:
 	sf::VertexArray ray;
 	sf::VertexArray light; // Visable
 
+	// Floor 2D
+	sf::Texture floorTexture;
+	sf::Sprite floorSprite;
 
 	// 3D
 	bool topDown = true;
@@ -89,6 +92,7 @@ private:
 	sf::RectangleShape floor;
 	sf::Texture gadgetTexture;
 	sf::Sprite gadgetSprite;
+
 
 	sf::Vector2f spawnPos;
 

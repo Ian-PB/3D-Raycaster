@@ -21,8 +21,9 @@ public:
 
 	// "Get" functions
 	sf::RectangleShape getBody() { return body; }
+	sf::Sprite getSprite() { return sprite; }
 	sf::Vector2f getPos() { return position; }
-	void setPos(sf::Vector2f t_newPos) { position = t_newPos; body.setPosition(position); }
+	void setPos(sf::Vector2f t_newPos) { position = t_newPos; body.setPosition(position); sprite.setPosition(position); }
 	float getAngle() { return angleR; }
 
 	// Movement
@@ -37,8 +38,10 @@ private:
 	void move(bool t_2D);
 
 	// Variables
+	sf::Sprite sprite;
+	sf::Texture texture;
 	sf::RectangleShape body;
-	float size = 10.0f;
+	float size = 20.0f;
 	sf::Vector2f position;
 
 	// Movement Variables

@@ -242,13 +242,16 @@ void Game::render(sf::RenderWindow& t_window)
 	// Check which mode
 	if (topDown)
 	{
+		// Floor
+		t_window.draw(floorSprite);
+
 		// Top down Walls / Objects
 		for (int i = 0; i < 64; i++)
 		{
 			// Walls
 			if (walls[i].active)
 			{
-				t_window.draw(walls[i].getBody());
+				t_window.draw(walls[i].getSprite());
 			}
 			// Invis 3D
 			else if (invisWalls[i].active)
@@ -283,6 +286,7 @@ void Game::render(sf::RenderWindow& t_window)
 
 		// Player
 		t_window.draw(player.getBody());
+		t_window.draw(player.getSprite());
 	}
 
 	else
@@ -311,7 +315,17 @@ void Game::setupFontAndText()
 
 void Game::setupSprites()
 {
-	// Floor
+	// Floor Sprite
+	if (!floorTexture.loadFromFile("ASSETS\\IMAGES\\Floor.png"))
+	{
+		std::cout << "problem loading Floor" << std::endl;
+	}
+	floorTexture.setRepeated(true);
+	floorTexture.setSmooth(true);
+	floorSprite.setTextureRect(sf::IntRect{ 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT });
+	floorSprite.setTexture(floorTexture);
+
+	// Floor 3D
 	floor.setFillColor({ 200, 200, 200, 255 });
 	floor.setSize({ SCREEN_WIDTH - 8, 160 });
 	floor.setPosition(5, 160);
@@ -345,6 +359,8 @@ void Game::drawMap()
 {
 	if (levelOpened)
 	{
+		topDown = true;
+
 		// Get the current level
 		switch (Scenes::level)
 		{

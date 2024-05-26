@@ -28,8 +28,17 @@ private:
 
 
 	sf::Vector2f mousePos;
+	sf::Font font;
 
 	Button buttons[LEVELS_AMOUNT];
 	bool colliding[LEVELS_AMOUNT];
+	sf::Text numbers[LEVELS_AMOUNT];
+
+	// Background
+	sf::Texture backgroundTexture;
+	sf::Sprite backgroundSprite;
+
+	// Instructions
+	sf::Text instructions;
 };
 

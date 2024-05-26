@@ -2,6 +2,22 @@
 
 MainMenu::MainMenu()
 {
+	if (!font.loadFromFile("ASSETS\\FONTS\\ariblk.ttf"))
+	{
+		std::cout << "problem loading Font" << std::endl;
+	}
+
+	// Floor Sprite
+	if (!backgroundTexture.loadFromFile("ASSETS\\IMAGES\\Floor.png"))
+	{
+		std::cout << "problem loading Floor" << std::endl;
+	}
+	backgroundTexture.setRepeated(true);
+	backgroundTexture.setSmooth(true);
+	backgroundSprite.setTextureRect(sf::IntRect{ 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT });
+	backgroundSprite.setTexture(backgroundTexture);
+	backgroundSprite.setColor({50, 50, 50, 255});
+
 	for (int i = 0; i < LEVELS_AMOUNT; i++)
 	{
 		float xValue = 0.0f;
@@ -10,11 +26,11 @@ MainMenu::MainMenu()
 
 		if (i < LEVELS_AMOUNT / 2)
 		{
-			yValue = (SCREEN_HEIGHT / 4.0f) + 50;
+			yValue = (SCREEN_HEIGHT / 4.0f) + 100;
 		}
 		else
 		{
-			yValue = ((SCREEN_HEIGHT / 4.0f) * 3) - 50;
+			yValue = ((SCREEN_HEIGHT / 4.0f) * 3) - 25;
 		}
 
 		xValue = (i * 2.0f) * 50 + 55;
@@ -26,7 +42,30 @@ MainMenu::MainMenu()
 
 		sf::Vector2f tempPos = { xValue, yValue };
 		buttons[i].setup(tempPos, 75, 75, sf::Color::Red);
+
+		// Numbers
+		numbers[i].setFont(font);
+		numbers[i].setCharacterSize(25);
+		numbers[i].setFillColor(sf::Color::White);
+		numbers[i].setOutlineColor(sf::Color::Black);
+		numbers[i].setOutlineThickness(2);
+
+		numbers[i].setString(std::to_string(i + 1));
+		if (numbers[i].getString() == "10")
+		{
+			numbers[i].setPosition({ tempPos.x - 17, tempPos.y - 15 });
+		}
+		else
+		{
+			numbers[i].setPosition({ tempPos.x - 8, tempPos.y - 15 });
+		}
 	}
+
+	// Instructions
+	instructions.setFont(font);
+	instructions.setCharacterSize(15);
+	instructions.setPosition(15, 15);
+	instructions.setString("Use W or Up-Arrow to move forwards. \nUse S or Down-Arrow to move backwards. \nD or Right-Arrow to rotate clockwise. \nA or Left-Arrow to rotate counter-clockwise. \nUse E to open doors(blue) \nUse Q to swap between 3D and 2D.");
 }
 
 void MainMenu::processEvents(sf::Event t_event)
@@ -66,11 +105,17 @@ void MainMenu::update(sf::Time t_deltaTime)
 
 void MainMenu::render(sf::RenderWindow& t_window)
 {
-	t_window.clear({ 180, 180, 180, 255 });
+	t_window.clear({ 10, 15, 10, 255 });
+
+	t_window.draw(backgroundSprite);
+	t_window.draw(instructions);
 
 	for (int i = 0; i < LEVELS_AMOUNT; i++)
 	{
-		t_window.draw(buttons[i].getBody());
+		// t_window.draw(buttons[i].getBody());
+		t_window.draw(buttons[i].getSprite());
+
+		t_window.draw(numbers[i]);
 	}
 
 	t_window.display();
@@ -93,63 +138,53 @@ void MainMenu::processMouseDown(sf::Event t_event)
 			{
 				// Start button
 			case 0:
-				std::cout << "Level 1 \n";
 				Scenes::level = 1;
 				Scenes::currentMode = Scene::Game;
 				break;
 
 
 			case 1:
-				std::cout << "Level 2 \n";
 				Scenes::level = 2;
 				Scenes::currentMode = Scene::Game;
 				break;
 
 
 			case 2:
-				std::cout << "Level 3 \n";
 				Scenes::level = 3;
 				Scenes::currentMode = Scene::Game;
 				break;
 
 			case 3:
-				std::cout << "Level 4 \n";
 				Scenes::level = 4;
 				Scenes::currentMode = Scene::Game;
 				break;
 
 			case 4:
-				std::cout << "Level 5 \n";
 				Scenes::level = 5;
 				Scenes::currentMode = Scene::Game;
 				break;
 
 			case 5:
-				std::cout << "Level 6 \n";
 				Scenes::level = 6;
 				Scenes::currentMode = Scene::Game;
 				break;
 
 			case 6:
-				std::cout << "Level 7 \n";
 				Scenes::level = 7;
 				Scenes::currentMode = Scene::Game;
 				break;
 
 			case 7:
-				std::cout << "Level 8 \n";
 				Scenes::level = 8;
 				Scenes::currentMode = Scene::Game;
 				break;
 
 			case 8:
-				std::cout << "Level 9 \n";
 				Scenes::level = 9;
 				Scenes::currentMode = Scene::Game;
 				break;
 
 			case 9:
-				std::cout << "Level 10 \n";
 				Scenes::level = 10;
 				Scenes::currentMode = Scene::Game;
 				break;
@@ -160,14 +195,7 @@ void MainMenu::processMouseDown(sf::Event t_event)
 
 void MainMenu::processKeys(sf::Event t_event)
 {
-	if (sf::Keyboard::Escape == t_event.key.code)
-	{
-		for (int i = 0; i < LEVELS_AMOUNT; i++)
-		{
-			std::cout << colliding[i] << std::endl;
-		}
-		std::cout << std::endl;
-	}
+	
 }
 
 void MainMenu::setupFontAndText()

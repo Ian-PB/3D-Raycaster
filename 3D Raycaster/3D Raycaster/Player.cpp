@@ -7,6 +7,18 @@
 // Default constructer
 Player::Player()
 {
+	// Player Sprite
+	if (!texture.loadFromFile("ASSETS\\IMAGES\\Player.png"))
+	{
+		std::cout << "problem loading Player" << std::endl;
+	}
+
+	texture.setSmooth(true);
+	sprite.setTexture(texture);
+	sprite.setScale(0.2, 0.2);
+	sprite.setRotation((angleR * 180 / PI) - 90);
+
+
 	direction = Direction::None;
 }
 
@@ -37,6 +49,8 @@ void Player::checkDirection(bool t_2D)
 		{
 			angleR = PI;
 		}
+
+		sprite.setRotation((angleR * 180 / PI) - 90);
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D))
@@ -49,6 +63,8 @@ void Player::checkDirection(bool t_2D)
 		{
 			angleR = -PI;
 		}
+
+		sprite.setRotation((angleR * 180 / PI) - 90);
 	}
 }
 
@@ -77,6 +93,7 @@ void Player::move(bool t_2D)
 
 	position += movement;
 	body.setPosition(position); // Change hitbox position
+	sprite.setPosition(position); // Change hitbox position
 
 	checkBoundries();
 }
@@ -114,5 +131,8 @@ void Player::setup(sf::Vector2f t_pos)
 	body.setFillColor(sf::Color::Blue);
 	body.setSize({ size, size });
 	body.setOrigin({ size / 2.0f, size / 2.0f });
+
+	sprite.setPosition(position);
+	sprite.setOrigin({ 150 / 2.0f, 150 / 2.0f });
 }
 

@@ -2,6 +2,15 @@
 
 Wall::Wall()
 {
+	// Floor Sprite
+	if (!texture.loadFromFile("ASSETS\\IMAGES\\Floor.png"))
+	{
+		std::cout << "problem loading Floor" << std::endl;
+	}
+	texture.setRepeated(true);
+	texture.setSmooth(true);
+	sprite.setTexture(texture);
+
 	body.setFillColor(sf::Color::Black);
 }
 

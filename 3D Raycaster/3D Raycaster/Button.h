@@ -9,6 +9,7 @@ public:
 	Button();
 
 	sf::RectangleShape getBody() { return body; }
+	sf::Sprite getSprite() { return sprite; }
 
 	void setup(sf::Vector2f t_pos, float t_width, float t_height, sf::Color t_color);
 
@@ -19,6 +20,9 @@ public:
 
 private:
 
+	sf::Sprite sprite;
+	sf::Texture texture;
+
 	sf::RectangleShape body;
 	float width;
 	float height;
@@ -26,5 +30,7 @@ private:
 	sf::Vector2f position;
 
 	bool colliding = false;
+
+	float scale = 1;
 
 };
