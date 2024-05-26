@@ -12,6 +12,7 @@
 #include "Trap.h"
 #include "Door.h"
 #include "MovingTrap.h"
+#include "Exit.h"
 
 class Game
 {
@@ -49,10 +50,11 @@ private:
 		1,0,0,0,0,0,0,1,
 		1,0,0,-1,0,0,0,1,
 		1,0,0,0,0,0,0,1,
-		1,0,11,0,0,0,0,1,
 		1,0,0,0,0,0,0,1,
+		1,0,0,0,0,0,-2,1,
 		1,1,1,1,1,1,1,1
 	};
+	bool levelOpened = true;
 
 
 
@@ -68,6 +70,8 @@ private:
 	MovingTrap trapUpDown[64];       // 9
 	MovingTrap trapSide3D[64];       // 10
 	MovingTrap trapUpDown3D[64];     // 11
+	Exit exit;                       // -2
+
 
 	// Rays
 	void drawRays3D();
@@ -87,6 +91,9 @@ private:
 	sf::Sprite gadgetSprite;
 
 	sf::Vector2f spawnPos;
+
+	bool exitGame = false;
+
 };
 
 

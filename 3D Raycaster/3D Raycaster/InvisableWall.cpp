@@ -2,5 +2,5 @@
 
 InvisableWall::InvisableWall()
 {
-	body.setFillColor(sf::Color::Green);
+	body.setFillColor(INVIS_COLOR);
 }

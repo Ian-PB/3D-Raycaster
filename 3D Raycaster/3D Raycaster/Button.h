@@ -14,6 +14,8 @@ public:
 
 	bool checkForMouse(sf::Vector2f t_mousePos);
 
+	void changeColor(sf::Color t_color);
+
 
 private:
 

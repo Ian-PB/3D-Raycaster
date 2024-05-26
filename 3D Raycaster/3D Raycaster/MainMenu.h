@@ -29,7 +29,7 @@ private:
 
 	sf::Vector2f mousePos;
 
-	Button buttons[3];
-	bool colliding[3];
+	Button buttons[LEVELS_AMOUNT];
+	bool colliding[LEVELS_AMOUNT];
 };
 

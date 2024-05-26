@@ -42,3 +42,8 @@ bool Button::checkForMouse(sf::Vector2f t_mousePos)
 
 	return colliding; // if not colliding
 }
+
+void Button::changeColor(sf::Color t_color)
+{
+	body.setFillColor(t_color);
+}

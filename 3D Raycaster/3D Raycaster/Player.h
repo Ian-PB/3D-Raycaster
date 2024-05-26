@@ -10,8 +10,6 @@ enum class Direction
 	None,
 	Up,
 	Down,
-	Left,
-	Right
 };
 
 class Player
@@ -29,7 +27,6 @@ public:
 
 	// Movement
 	void checkDirection(bool t_2D);
-	void rotateToMouse(sf::Vector2f t_mousePos, bool t_2D);
 
 	bool alive = true;
 

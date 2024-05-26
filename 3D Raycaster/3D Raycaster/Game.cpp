@@ -22,6 +22,8 @@ Game::Game()
 
 	// Map
 	drawMap();
+	levelOpened = true;
+
 	player.setup(spawnPos);
 
 	setupObjects(); // load texture
@@ -72,7 +74,7 @@ void Game::processKeys(sf::Event t_event)
 {
 	if (sf::Keyboard::Escape == t_event.key.code)
 	{
-		Scenes::currentMode = Scene::MainMenu;
+		exitGame = true;
 	}
 
 	if (sf::Keyboard::Q == t_event.key.code)
@@ -82,17 +84,6 @@ void Game::processKeys(sf::Event t_event)
 
 	if (sf::Keyboard::E == t_event.key.code)
 	{
-		// DEBUGGING
-		for (int m = 0; m < 64; m++)
-		{
-			if (m % 8 == 0)
-			{
-				std::cout << "\n";
-			}
-			std::cout << map[m] << ", ";
-		}
-		std::cout << "\n";
-
 		for (int i = 0; i < 64; i++)
 		{
 			if (topDown)
@@ -102,7 +93,6 @@ void Game::processKeys(sf::Event t_event)
 					if (doors[i].open())
 					{
 						map[i] = 0;
-						drawMap();
 					}
 				}
 			}
@@ -113,7 +103,6 @@ void Game::processKeys(sf::Event t_event)
 					if (doors3D[i].open())
 					{
 						map[i] = 0;
-						drawMap();
 					}
 				}
 			}
@@ -127,6 +116,14 @@ void Game::processKeys(sf::Event t_event)
 /// <param name="t_deltaTime">time interval per frame</param>
 void Game::update(sf::Time t_deltaTime)
 {
+	if (exitGame)
+	{
+		exitGame = false;
+
+		levelOpened = true;
+		Scenes::currentMode = Scene::MainMenu;
+	}
+
 	// Rays & 3D
 	drawRays3D();
 	makeLight();
@@ -135,7 +132,6 @@ void Game::update(sf::Time t_deltaTime)
 	if (player.alive)
 	{
 		player.checkDirection(topDown);
-		player.rotateToMouse(mousePos, topDown);
 	}
 
 	// Collisions
@@ -224,7 +220,14 @@ void Game::update(sf::Time t_deltaTime)
 			// Check collisions with all other objects in 2D space
 			trapUpDown3D[i].move(map, i, 11);
 		}
+
+		// Exit collision
+		if (exit.active)
+		{
+			exit.collisionDetection(player, exitGame);
+		}
 	}
+
 	drawMap();
 }
 
@@ -268,6 +271,10 @@ void Game::render(sf::RenderWindow& t_window)
 			{
 				t_window.draw(trapUpDown[i].getBody());
 			}
+			else if (exit.active)
+			{
+				t_window.draw(exit.getBody());
+			}
 
 			// Rays
 			//t_window.draw(ray); // Used for DeBug
@@ -306,7 +313,7 @@ void Game::setupSprites()
 {
 	// Floor
 	floor.setFillColor({ 200, 200, 200, 255 });
-	floor.setSize({ SCREEN_WIDTH / 2 - 8, 160 });
+	floor.setSize({ SCREEN_WIDTH - 8, 160 });
 	floor.setPosition(5, 160);
 
 	// Gadget Sprite
@@ -336,6 +343,85 @@ void Game::setupObjects()
 
 void Game::drawMap()
 {
+	if (levelOpened)
+	{
+		// Get the current level
+		switch (Scenes::level)
+		{
+		case 1:
+			for (int i = 0; i < 64; i++)
+			{
+				map[i] = LEVEL_1[i];
+			}
+			break;
+
+		case 2:
+			for (int i = 0; i < 64; i++)
+			{
+				map[i] = LEVEL_2[i];
+			}
+			break;
+
+		case 3:
+			for (int i = 0; i < 64; i++)
+			{
+				map[i] = LEVEL_3[i];
+			}
+			break;
+
+		case 4:
+			for (int i = 0; i < 64; i++)
+			{
+				map[i] = LEVEL_4[i];
+			}
+			break;
+
+		case 5:
+			for (int i = 0; i < 64; i++)
+			{
+				map[i] = LEVEL_5[i];
+			}
+			break;
+
+		case 6:
+			for (int i = 0; i < 64; i++)
+			{
+				map[i] = LEVEL_6[i];
+			}
+			break;
+
+		case 7:
+			for (int i = 0; i < 64; i++)
+			{
+				map[i] = LEVEL_7[i];
+			}
+			break;
+
+		case 8:
+			for (int i = 0; i < 64; i++)
+			{
+				map[i] = LEVEL_8[i];
+			}
+			break;
+
+		case 9:
+			for (int i = 0; i < 64; i++)
+			{
+				map[i] = LEVEL_9[i];
+			}
+			break;
+
+		case 10:
+			for (int i = 0; i < 64; i++)
+			{
+				map[i] = LEVEL_10[i];
+			}
+			break;
+		}
+	}
+	
+	
+	
 	// De-activate all changable blocks
 	for (int i = 0; i < 64; i++)
 	{
@@ -353,7 +439,7 @@ void Game::drawMap()
 
 	for (int i = 0; i < 64; i++)
 	{
-		if (pos.x >= SCREEN_WIDTH / 2.0f)
+		if (pos.x >= SCREEN_WIDTH)
 		{
 			pos.y += blockSize;
 			pos.x = blockSize / 2.0f;
@@ -410,6 +496,10 @@ void Game::drawMap()
 		{
 			spawnPos = pos;
 		}
+		else if (map[i] == -2)
+		{
+			exit.spawn(blockSize, pos);
+		}
 		else // = 0
 		{
 			// Empty
@@ -421,6 +511,13 @@ void Game::drawMap()
 		}
 
 		pos.x += blockSize;
+	}
+
+	if (levelOpened)
+	{
+		player.setPos(spawnPos);
+
+		levelOpened = false;
 	}
 }
 
@@ -554,6 +651,17 @@ void Game::drawRays3D()
 
 				dof = 8; // Hit a wall
 			}
+			else if (mp > 0 && mp < mapX * mapY && map[mp] == -2)
+			{
+				hx = rayPos.x;
+				hy = rayPos.y;
+				distH = dist(player.getPos().x, player.getPos().y, hx, hy, rayAngle);
+
+				// Color
+				wallColorH = EXIT_COLOR;
+
+				dof = 8; // Hit a wall
+			}
 			else
 			{
 				rayPos.x += xOffset;
@@ -669,6 +777,17 @@ void Game::drawRays3D()
 
 				// Color
 				wallColorV = TRAP_COLOR;
+
+				dof = 8; // Hit a wall
+			}
+			else if (mp > 0 && mp < mapX * mapY && map[mp] == -2)
+			{
+				vx = rayPos.x;
+				vy = rayPos.y;
+				distV = dist(player.getPos().x, player.getPos().y, vx, vy, rayAngle);
+
+				// Color
+				wallColorV = EXIT_COLOR;
 
 				dof = 8; // Hit a wall
 			}
@@ -865,6 +984,15 @@ void Game::makeLight()
 
 				dof = 8; // Hit a wall
 			}
+			else if (mp > 0 && mp < mapX * mapY && map[mp] == -2)
+			{
+				hx = lightEnd.x;
+				hy = lightEnd.y;
+				distH = dist(player.getPos().x, player.getPos().y, hx, hy, lightAngle);
+
+
+				dof = 8; // Hit a wall
+			}
 			else
 			{
 				lightEnd.x += xOffset;
@@ -887,7 +1015,7 @@ void Game::makeLight()
 		float nTan = -tan(lightAngle);
 
 
-		if ((lightAngle >= P2 && lightAngle <= P3) || (lightAngle <= -P2 && lightAngle >= -P3)) // Looking left
+		if ((lightAngle > P2 && lightAngle < P3) || (lightAngle < -P2 && lightAngle > -P3)) // Looking left
 		{
 			lightEnd.x = (((int)player.getPos().x >> 6) << 6) - 0.0001f;
 			lightEnd.y = (player.getPos().x - lightEnd.x) * nTan + player.getPos().y;
@@ -895,7 +1023,7 @@ void Game::makeLight()
 			yOffset = -xOffset * nTan;
 		}
 
-		if ((lightAngle <= P2 && lightAngle >= -P2) || (lightAngle >= P3 && lightAngle <= P3)) // Looking right
+		if ((lightAngle < P2 && lightAngle > -P2) || (lightAngle > P3 && lightAngle < P3)) // Looking right
 		{
 			lightEnd.x = (((int)player.getPos().x >> 6) << 6) + 64;
 			lightEnd.y = (player.getPos().x - lightEnd.x) * nTan + player.getPos().y;

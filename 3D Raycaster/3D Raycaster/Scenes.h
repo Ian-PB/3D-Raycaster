@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Globals.h"
+
 enum class Scene
 {
 	None,
@@ -10,6 +12,10 @@ enum class Scene
 class Scenes
 {
 public:
-	Scenes() { currentMode = Scene::None; }
+	Scenes();
 	static Scene currentMode;
+
+	// Level
+	static int level;
+	static bool levelComplete[LEVELS_AMOUNT];
 };

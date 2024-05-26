@@ -1,6 +1,8 @@
 #include "SceneManager.h"
 
 Scene Scenes::currentMode = Scene::MainMenu;
+int Scenes::level = 0;
+bool Scenes::levelComplete[LEVELS_AMOUNT];
 
 SceneManager::SceneManager() :
 	m_window{ sf::VideoMode{ SCREEN_WIDTH, SCREEN_HEIGHT, 32U }, "Top Down" },
